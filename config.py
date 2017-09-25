@@ -15,7 +15,7 @@ class Config(object):
     # Secret key for signing cookies
     SECRET_KEY = 'secret'
     # Define the database - we are working with
-    # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class ProductionConfig(Config):
@@ -30,7 +30,7 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://localhost/test'
+    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://localhost/test'
 
 
 class TestingConfig(Config):
