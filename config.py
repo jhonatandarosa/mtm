@@ -15,7 +15,7 @@ class Config(object):
     # Secret key for signing cookies
     SECRET_KEY = 'secret'
     # Define the database - we are working with
-    # SQLALCHEMY_DATABASE_URI = os.environ['DATABASE_URL']
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 
 class ProductionConfig(Config):
