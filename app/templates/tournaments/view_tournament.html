@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}
+{% block head %}
+{% endblock %}
+{% block section %}Tournaments{% endblock %}
+
+{% block body %}
+
+    <h2>{{ tournament.name }}</h2>
+    <h4>Scores</h4>
+    {% with ranking = data %}
+        {% include 'ranking/table_view.html' %}
+    {% endwith %}
+    <br/>
+    <h4>Rounds</h4>
+    <br/>
+    {% for round in rounds %}
+        {% set cols = round|count %}
+        {% set cols = 12/cols %}
+        {% set cols = cols|round|int %}
+        <p>Round {{ loop.index }}</p>
+        <hr/>
+        <div class="row">
+            {% for game in round %}
+                {% set p1class = 'teal lighten-5' if game.p1_wins > game.p2_wins else '' %}
+                {% set p2class = 'teal lighten-5' if game.p2_wins > game.p1_wins else '' %}
+                <div class="col m{{ cols }}">
+                    <table class="bordered">
+                        <tr class="{{ p1class }}">
+                            <td>{{ participants[game.p1_id].name }}</td>
+                            <td>{{ game.p1_wins }}</td>
+                        </tr>
+                        <tr class="{{ p2class }}">
+                            <td>{{ participants[game.p2_id].name }}</td>
+                            <td>{{ game.p2_wins }}</td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+        <br/>
+    {% endfor %}
+
+{% endblock %}

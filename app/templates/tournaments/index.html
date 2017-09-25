@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+{#{% block head %}#}
+{#    <script src="/static/js/players.js"></script>#}
+{#{% endblock %}#}
+{% block section %}Tournaments{% endblock %}
+
+{% block body %}
+    <hr/>
+    {% for t in tournaments %}
+        <a href='/tournaments/{{ t.id }}'>{{ t.name }}</a><br/>
+    {% endfor %}
+
+{% endblock %}

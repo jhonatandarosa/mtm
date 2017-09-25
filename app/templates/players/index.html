@@ -6,24 +6,11 @@
 
 {% block body %}
     <!-- Modal Trigger -->
-    <button data-target="modal1" class="btn modal-trigger">New</button>
+    {% if admin %}
+        <button data-target="modal1" class="btn modal-trigger">New</button>
+    {% endif %}
     <hr/>
-    <table class="bordered highlight">
-        <thead>
-        <tr>
-            <th>Name</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for player in players %}
-            <tr>
-                <td>
-                    {{ player.name }}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% include 'ranking/table_view.html' %}
 
     <!-- Modal Structure -->
     <div id="modal1" class="modal bottom-sheet">

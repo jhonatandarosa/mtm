@@ -1,0 +1,36 @@
+<table class="bordered highlight">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Match Wins</th>
+        <th>Match Lost</th>
+        <th>Set Wins</th>
+        <th>Set Lost</th>
+        <th>Points</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for rank in ranking %}
+        <tr>
+            <td>
+                {{ players[rank['id']].name }}
+            </td>
+            <td>
+                {{ rank['mw'] }}
+            </td>
+            <td>
+                {{ rank['ml'] }}
+            </td>
+            <td>
+                {{ rank['w'] }}
+            </td>
+            <td>
+                {{ rank['l'] }}
+            </td>
+            <td>
+                {{ rank['pts'] }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

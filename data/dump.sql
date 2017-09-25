@@ -28,22 +28,22 @@ INSERT INTO deck (id, name) VALUES
   (17, 'GB Sacrifício');
 
 
---- tournament 1
+-- tournament 1
 INSERT INTO tournament (id, name) VALUES (1, '1° DGT Magic Tournament');
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
-  (1, 1, 1, 16),--Jhonatan
-  (2, 1, 4, 17),--Alexandre
-  (3, 1, 5, 11),--Anderson
-  (4, 1, 2, 14),--Maurício
-  (5, 1, 3, 12),--Sérgio
-  (6, 1, 6, 13);--Israel
+  (1, 1, 1, 16), -- Jhonatan
+  (2, 1, 4, 17), -- Alexandre
+  (3, 1, 5, 11), -- Anderson
+  (4, 1, 2, 14), -- Maurício
+  (5, 1, 3, 12), -- Sérgio
+  (6, 1, 6, 13); -- Israel
 
---rounds
+-- rounds
 INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   -- round 1
   (1, 1, 2, 6, 2, 0),
   (1, 1, 1, 3, 2, 1),
-  (1, 1, 4, 5, 0, 2),
+  (1, 1, 4, 5, 2, 0),
   -- round 2
   (1, 2, 5, 3, 1, 2),
   (1, 2, 4, 6, 2, 0),
@@ -53,23 +53,23 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   (1, 3, 6, 5, 2, 0),
   (1, 3, 1, 4, 0, 2),
   -- round 4
-  (1, 4, 6, 3, 1, 0),
+  (1, 4, 6, 3, 0, 1),
   (1, 4, 1, 5, 1, 2),
   (1, 4, 4, 2, 2, 0);
 
 
 
---- tournament 2
+-- tournament 2
 INSERT INTO tournament (id, name) VALUES (2, '2° DGT Magic Tournament');
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
-  (7, 2, 1, 17),--Jhonatan
-  (8, 2, 4, 3),--Alexandre
-  (9, 2, 5, 6),--Anderson
-  (10, 2, 2, 8),--Maurício
-  (11, 2, 3, 2),--Sérgio
-  (12, 2, 6, 15);--Israel
+  (7, 2, 1, 17), -- Jhonatan
+  (8, 2, 4, 3),  -- Alexandre
+  (9, 2, 5, 6),  -- Anderson
+  (10, 2, 2, 8), -- Maurício
+  (11, 2, 3, 2), -- Sérgio
+  (12, 2, 6, 15);-- Israel
 
---rounds
+-- rounds
 INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   -- round 1
   (2, 1, 7, 12, 0, 2),
@@ -78,7 +78,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   -- round 2
   (2, 2, 7, 10, 0, 2),
   (2, 2, 8, 9, 2, 1),
-  (2, 2, 12, 11, 2, 1),
+  (2, 2, 12, 11, 1, 2),
   -- round 3
   (2, 3, 7, 9, 2, 0),
   (2, 3, 12, 10, 2, 0),
