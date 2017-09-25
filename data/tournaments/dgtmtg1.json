@@ -1,0 +1,178 @@
+{
+  "players": [
+    {
+      "name": "Jhonatan",
+      "deck": "GB Elfos"
+    },
+    {
+      "name": "Alexandre",
+      "deck": "GB Sacrifício"
+    },
+    {
+      "name": "Anderson",
+      "deck": "BW Vampiros"
+    },
+    {
+      "name": "Maurício",
+      "deck": "WRG Aliados"
+    },
+    {
+      "name": "Sérgio",
+      "deck": "BU Descarte"
+    },
+    {
+      "name": "Israel",
+      "deck": "WB Cura"
+    }
+  ],
+  "rounds":[
+    {
+      "id": 1,
+      "games": [
+        {
+          "p1": {
+            "name": "Jhonatan",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Anderson",
+            "wins": 1
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Alexandre",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Israel",
+            "wins": 0
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Maurício",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Sérgio",
+            "wins": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "games": [
+        {
+          "p1": {
+            "name": "Sérgio",
+            "wins": 1
+          },
+          "p2": {
+            "name": "Anderson",
+            "wins": 2
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Maurício",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Israel",
+            "wins": 0
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Jhonatan",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Alexandre",
+            "wins": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "games": [
+        {
+          "p1": {
+            "name": "Alexandre",
+            "wins": 1
+          },
+          "p2": {
+            "name": "Anderson",
+            "wins": 2
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Maurício",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Jhonatan",
+            "wins": 0
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Israel",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Sérgio",
+            "wins": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "games": [
+        {
+          "p1": {
+            "name": "Israel",
+            "wins": 0
+          },
+          "p2": {
+            "name": "Anderson",
+            "wins": 1
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Jhonatan",
+            "wins": 1
+          },
+          "p2": {
+            "name": "Sérgio",
+            "wins": 2
+          }
+        },
+
+        {
+          "p1": {
+            "name": "Maurício",
+            "wins": 2
+          },
+          "p2": {
+            "name": "Alexandre",
+            "wins": 0
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+insert into deck (name) values("Mono White Espadas");
+insert into deck (name) values("Mono Black Vampiros");
+insert into deck (name) values("Mono Blue Milling");
+insert into deck (name) values("Dimir");
+insert into deck (name) values("Golgari");
+
+
+
+
+
+
+
+
+
+
+
