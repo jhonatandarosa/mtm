@@ -92,7 +92,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   (2, 5, 9, 12, 0, 2),
   (2, 5, 11, 10, 2, 0);
 
--- tournament 2
+-- tournament 3
 INSERT INTO tournament (id, name) VALUES (3, '3° DGT Magic Tournament');
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
   (13, 3, 1, 8),  -- Jhonatan
@@ -107,7 +107,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   (3, 1, 15, 17, 2, 1),
   (3, 1, 16, 14, 2, 1),
   -- round 2
-  (3, 2, 17, 16, 0, 1),--
+  (3, 2, 17, 16, 2, 1),--
   (3, 2, 13, 15, 2, 0),
   -- round 3
   (3, 3, 16, 13, 2, 1),
