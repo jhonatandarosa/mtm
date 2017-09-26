@@ -107,7 +107,7 @@ class Ranking:
         for tid in tournament_stats:
             self.tournaments.append(ranking(tournament_stats[tid]))
 
-    def getTournamentRanking(self, id):
+    def get_tournament_ranking(self, id):
         return self.tournaments[id-1]
 
 

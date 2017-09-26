@@ -1,0 +1,14 @@
+.game .score-edit {
+    display: none;
+}
+
+.game:hover .score-edit {
+    display: table-cell;
+    max-width: 16px;
+    vertical-align: middle;
+}
+
+.modal.score-edit {
+    width: 400px;
+    height: 250px;
+}

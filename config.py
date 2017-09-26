@@ -30,7 +30,6 @@ class StagingConfig(Config):
 class DevelopmentConfig(Config):
     DEVELOPMENT = True
     DEBUG = True
-    # SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://localhost/test'
 
 
 class TestingConfig(Config):

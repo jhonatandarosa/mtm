@@ -7,27 +7,12 @@ from app.model import Player
 from app.model import Participant
 from app.model import Tournament
 from app.model import Game
+from app.model import helper
 
 from app.core import Ranking
 
 bp = Blueprint('blueprint_%s' % __name__, __name__, url_prefix='/tournaments', template_folder='templates/',
                static_folder='/static')
-
-
-def groupByRound(games):
-    rounds = {}
-
-    for game in games:
-        if game.round not in rounds:
-            rounds[game.round] = []
-
-        rounds[game.round].append(game)
-
-    result = []
-    for r in rounds:
-        result.append(rounds[r])
-
-    return result
 
 
 @bp.route('/')
@@ -58,12 +43,14 @@ def view_tournament(tid):
     for p in participants:
         pmap[p.id] = players_map[p.player_id]
 
-    admin = request.args.get('admin', '') == 'True'
+    data = Ranking().get_tournament_ranking(tid)
 
-    data = Ranking().getTournamentRanking(tid)
+    rounds = helper.group_by_round(games)
 
-    rounds = groupByRound(games)
-
-    return render_template('tournaments/view_tournament.html', admin=admin, participants=pmap, players=players_map,
-                           tournament=tournament,
-                           rounds=rounds, data=data)
+    return render_template(
+        'tournaments/view_tournament.html',
+        participants=pmap,
+        players=players_map,
+        tournament=tournament,
+        rounds=rounds, data=data
+    )

@@ -1,6 +1,8 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <script src="/static/js/players.js"></script>
+    {% if admin %}
+        <script src="/static/js/players.js"></script>
+    {% endif %}
 {% endblock %}
 {% block section %}Players{% endblock %}
 
@@ -12,26 +14,31 @@
     <hr/>
     {% include 'ranking/table_view.html' %}
 
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal bottom-sheet">
-        <div class="modal-content">
-            <h4>New Player</h4>
-            <div class="input-field col s6">
-                <input id="name" type="text" class="validate">
-                <label for="name">Name</label>
+    {% if admin %}
+        <!-- Modal Structure -->
+        <div id="modal1" class="modal bottom-sheet">
+            <div class="modal-content">
+                <h4>New Player</h4>
+                <div class="input-field col s6">
+                    <input id="name" type="text" class="validate">
+                    <label for="name">Name</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+                <a onclick="createPlayer()"
+                   class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
             </div>
         </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-            <a onclick="createPlayer()" class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
-        </div>
-    </div>
+    {% endif %}
 {% endblock %}
 {% block scripts %}
-    <script>
-        $(document).ready(function () {
-            // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-            $('.modal').modal();
-        });
-    </script>
+    {% if admin %}
+        <script>
+            $(document).ready(function () {
+                // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+                $('.modal').modal();
+            });
+        </script>
+    {% endif %}
 {% endblock %}

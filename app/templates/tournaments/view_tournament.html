@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 {% block head %}
+    {% if admin %}
+        <link href="/static/css/view_tournament.css" rel="stylesheet"/>
+        <script src="/static/js/view_tournament.js"></script>
+    {% endif %}
 {% endblock %}
 {% block section %}Tournaments{% endblock %}
 
@@ -24,14 +28,22 @@
                 {% set p1class = 'teal lighten-5' if game.p1_wins > game.p2_wins else '' %}
                 {% set p2class = 'teal lighten-5' if game.p2_wins > game.p1_wins else '' %}
                 <div class="col m{{ cols }}">
-                    <table class="bordered">
-                        <tr class="{{ p1class }}">
-                            <td>{{ participants[game.p1_id].name }}</td>
-                            <td>{{ game.p1_wins }}</td>
+                    <table class="bordered game">
+                        <tr>
+                            <td class="{{ p1class }}">{{ participants[game.p1_id].name }}</td>
+                            <td class="{{ p1class }}">{{ game.p1_wins }}</td>
+                            {% if admin %}
+                                <td rowspan="2" class="score-edit">
+                                    <a class="btn-floating waves-effect waves-light"
+                                       onclick="editGame({{ game.id }}, '{{ participants[game.p1_id].name }}', {{ game.p1_wins }}, '{{ participants[game.p2_id].name }}', {{ game.p2_wins }})">
+                                        <i class="material-icons">edit</i>
+                                    </a>
+                                </td>
+                            {% endif %}
                         </tr>
-                        <tr class="{{ p2class }}">
-                            <td>{{ participants[game.p2_id].name }}</td>
-                            <td>{{ game.p2_wins }}</td>
+                        <tr>
+                            <td class="{{ p2class }}">{{ participants[game.p2_id].name }}</td>
+                            <td class="{{ p2class }}">{{ game.p2_wins }}</td>
                         </tr>
                     </table>
                 </div>
@@ -40,4 +52,38 @@
         <br/>
     {% endfor %}
 
+
+    {% if admin %}
+        <!-- Modal Structure -->
+        <div id="editGame" class="modal score-edit">
+            <div class="modal-content">
+                <h4>Edit Game</h4>
+                <div class="row">
+                    <div class="input-field col s5">
+                        <input id="p1Wins" type="text" class="validate">
+                        <label id="p1Name" for="name"></label>
+                    </div>
+                    <span class="col s2">X</span>
+                    <div class="input-field col s5">
+                        <input id="p2Wins" type="text" class="validate">
+                        <label id="p2Name" for="name"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Save</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {% if admin %}
+        <script>
+            $(document).ready(function () {
+                // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+                $('.modal').modal();
+            });
+        </script>
+    {% endif %}
 {% endblock %}
