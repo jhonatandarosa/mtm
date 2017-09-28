@@ -1,5 +1,9 @@
 {% extends 'layout.html' %}
 {% block head %}
+    {% if admin %}
+        <link href="/static/css/tournaments.css" rel="stylesheet"/>
+        <script src="/static/js/tournaments.js"></script>
+    {% endif %}
 {% endblock %}
 {% block section %}Tournaments{% endblock %}
 

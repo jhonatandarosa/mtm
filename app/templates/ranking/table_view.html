@@ -1,7 +1,12 @@
+{% set rc = ranking|count %}
+{% set show_t_wins = rc > 0 and 't' in ranking[0] %}
 <table class="bordered highlight">
     <thead>
     <tr>
         <th>Name</th>
+        {% if show_t_wins %}
+            <th>Tournaments</th>
+        {% endif %}
         <th>Match Wins</th>
         <th>Match Lost</th>
         <th>Set Wins</th>
@@ -13,8 +18,13 @@
     {% for rank in ranking %}
         <tr>
             <td>
-                {{ players[rank['id']].name }}
+                {{ participants[rank['id']].name }}
             </td>
+            {% if show_t_wins %}
+                <td>
+                    {{ rank['t'] }}
+                </td>
+            {% endif %}
             <td>
                 {{ rank['mw'] }}
             </td>
