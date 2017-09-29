@@ -56,12 +56,7 @@ class Ranking:
         ts_map = {}
         for t in ts:
             ts_map[t.id] = t
-            if t.id < 4:
-                t.status = 'finished'
-            else:
-                t.status = 'active'
-            session.add(t)
-        session.commit()
+
         parts_stats = {}
 
         for game in games:
