@@ -12,7 +12,9 @@
         <button data-target="modal1" class="btn modal-trigger">New</button>
     {% endif %}
     <hr/>
+    {% with participants = players %}
     {% include 'ranking/table_view.html' %}
+    {% endwith %}
 
     {% if admin %}
         <!-- Modal Structure -->

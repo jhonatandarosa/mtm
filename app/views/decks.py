@@ -24,4 +24,4 @@ def index_view():
 
     rank = Ranking().decks
 
-    return render_template('decks/index.html', admin=admin, players=result, ranking=rank)
+    return render_template('decks/index.html', admin=admin, decks=result, ranking=rank)

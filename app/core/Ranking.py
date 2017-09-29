@@ -6,6 +6,7 @@ from app import Session
 from app.model import Player
 from app.model import Game
 from app.model import Participant
+from app.model import Tournament
 
 sts = ['mw', 'ml', 'w', 'l', 'pts']
 
@@ -50,6 +51,11 @@ class Ranking:
     def refresh(self):
         session = Session()
         games = session.query(Game).all()
+        ts = session.query(Tournament).all()
+
+        ts_map = {}
+        for t in ts:
+            ts_map[t.id] = t
 
         parts_stats = {}
 
@@ -110,28 +116,38 @@ class Ranking:
         self.players = ranking(players_stats)
         self.decks = ranking(decks_stats)
 
-        self.tournaments = []
+        self.tournaments = {}
         for tid in tournament_stats:
-            self.tournaments.append(ranking(tournament_stats[tid]))
+            self.tournaments[tid] = ranking(tournament_stats[tid])
 
         for player in self.players:
             player['t'] = 0
 
-            for t in self.tournaments:
-                pid = parts_players[t[0]['id']]
+            for tid in self.tournaments:
+                data = self.tournaments[tid]
+                tournament = ts_map[tid]
+                if tournament.status != 'finished':
+                    continue
+
+                pid = parts_players[data[0]['id']]
                 if player['id'] == pid:
                     player['t'] += 1
 
         for deck in self.decks:
             deck['t'] = 0
 
-            for t in self.tournaments:
-                did = parts_decks[t[0]['id']]
+            for tid in self.tournaments:
+                data = self.tournaments[tid]
+                tournament = ts_map[tid]
+                if tournament.status != 'finished':
+                    continue
+
+                did = parts_decks[data[0]['id']]
                 if deck['id'] == did:
                     deck['t'] += 1
 
     def get_tournament_ranking(self, id):
-        return self.tournaments[id-1]
+        return self.tournaments[id]
 
 
 Ranking = SingletonDecorator(Ranking)

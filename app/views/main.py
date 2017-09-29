@@ -17,8 +17,7 @@ main = Blueprint('blueprint_%s' % __name__, __name__, template_folder='templates
 @main.route('/')
 def index_view():
     session = Session()
-    tournaments = session.query(Tournament).all()
-    tournament = tournaments[-1]
+    tournament = session.query(Tournament).filter(Tournament.status == 'active').one()
     tid = tournament.id
 
     participants = session.query(Participant).filter(Participant.tournament_id == tid).all()

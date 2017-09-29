@@ -5,7 +5,9 @@
 
 {% block body %}
 
+    {% with participants = decks %}
     {% include 'ranking/table_view.html' %}
+    {% endwith %}
 
 {% endblock %}
 {% block scripts %}

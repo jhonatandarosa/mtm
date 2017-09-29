@@ -18,7 +18,7 @@ bp = Blueprint('blueprint_%s' % __name__, __name__, url_prefix='/tournaments', t
 @bp.route('/')
 def index_view():
     session = Session()
-    tournaments = session.query(Tournament).all()
+    tournaments = session.query(Tournament).order_by(Tournament.id.desc()).all()
 
     admin = request.args.get('admin', '') == 'True'
 
