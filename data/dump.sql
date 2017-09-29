@@ -118,3 +118,32 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   -- round 5
   (3, 5, 14, 15, 1, 2),
   (3, 5, 17, 13, 0, 2);
+
+
+
+-- tournament 4
+INSERT INTO tournament (id, name) VALUES (4, '4° DGT Magic Tournament');
+INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
+  (18, 4, 1, 4),  -- Jhonatan
+  (19, 4, 4, 11), -- Alexandre
+  (20, 4, 2, 17),  -- Maurício
+  (21, 4, 3, 10), -- Sérgio
+  (22, 4, 7, 5);  -- Daniel
+
+-- rounds
+INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
+  -- round 1
+  (4, 1, 21, 22, 0, 0),
+  (4, 1, 20, 19, 0, 0),
+  -- round 2
+  (4, 2, 22, 20, 0, 0),
+  (4, 2, 18, 21, 0, 0),
+  -- round 3
+  (4, 3, 20, 18, 0, 0),
+  (4, 3, 19, 22, 0, 0),
+  -- round 4
+  (4, 4, 18, 19, 0, 0),
+  (4, 4, 21, 20, 0, 0),
+  -- round 5
+  (4, 5, 19, 21, 0, 0),
+  (4, 5, 22, 18, 0, 0);
