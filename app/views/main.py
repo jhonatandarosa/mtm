@@ -22,7 +22,7 @@ def index_view():
 
     participants = session.query(Participant).filter(Participant.tournament_id == tid).all()
 
-    games = session.query(Game).filter(Game.tournament_id == tid).all()
+    games = session.query(Game).filter(Game.tournament_id == tid).order_by(Game.id.asc()).all()
     players = session.query(Player).all()
 
     players_map = {}

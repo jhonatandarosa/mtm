@@ -31,7 +31,7 @@ def view_tournament(tid):
     participants = session.query(Participant).filter(Participant.tournament_id == tid).all()
 
     tournament = session.query(Tournament).filter(Tournament.id == tid).one()
-    games = session.query(Game).filter(Game.tournament_id == tid).order_by(Games.id.asc()).all()
+    games = session.query(Game).filter(Game.tournament_id == tid).order_by(Game.id.asc()).all()
     players = session.query(Player).all()
 
     players_map = {}
