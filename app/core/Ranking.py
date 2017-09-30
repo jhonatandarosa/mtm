@@ -96,6 +96,9 @@ class Ranking:
             did = participant.deck_id
             tid = participant.tournament_id
 
+            if ts_map[tid].status != 'finished':
+                continue
+
             if pid not in players_stats:
                 players_stats[pid] = create_stats()
 
