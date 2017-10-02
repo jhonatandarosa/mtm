@@ -50,6 +50,7 @@ class Ranking:
 
     def refresh(self):
         session = Session()
+        session.flush()
         games = session.query(Game).order_by(Game.id.asc()).all()
         ts = session.query(Tournament).all()
 
