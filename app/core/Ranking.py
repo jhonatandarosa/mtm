@@ -96,9 +96,6 @@ class Ranking:
             did = participant.deck_id
             tid = participant.tournament_id
 
-            if ts_map[tid].status != 'finished':
-                continue
-
             if pid not in players_stats:
                 players_stats[pid] = create_stats()
 
@@ -112,8 +109,10 @@ class Ranking:
                 tournament_stats[tid][participant.id] = create_stats()
 
             for s in sts:
-                players_stats[pid][s] += parts_stats[participant.id][s]
-                decks_stats[did][s] += parts_stats[participant.id][s]
+                if ts_map[tid].status == 'finished':
+                    players_stats[pid][s] += parts_stats[participant.id][s]
+                    decks_stats[did][s] += parts_stats[participant.id][s]
+
                 tournament_stats[tid][participant.id][s] += parts_stats[participant.id][s]
 
         self.players = ranking(players_stats)
