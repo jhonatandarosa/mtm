@@ -16,9 +16,12 @@
     </thead>
     <tbody>
     {% for rank in ranking %}
+        {% set p = participants[rank['id']] %}
         <tr>
             <td>
-                {{ participants[rank['id']].name }}
+                <span>{{ p['player'].name }}</span>
+                <br/>
+                <span class="blue-text text-darken-2">{{ p['deck'].name }}</span>
             </td>
             {% if show_t_wins %}
                 <td>

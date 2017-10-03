@@ -6,6 +6,8 @@ class Participant(db.Model):
     tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.id'))
     player_id = db.Column(db.Integer, db.ForeignKey('player.id'))
     deck_id = db.Column(db.Integer, db.ForeignKey('deck.id'))
+    # player2_id = db.Column(db.Integer, db.ForeignKey('player.id'))
+    # deck2_id = db.Column(db.Integer, db.ForeignKey('deck.id'))
 
     __table_args__ = (
         db.UniqueConstraint('player_id', 'tournament_id', name='uix_player_tournament'),

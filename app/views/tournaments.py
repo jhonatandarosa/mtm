@@ -7,6 +7,7 @@ from app.model import Player
 from app.model import Participant
 from app.model import Tournament
 from app.model import Game
+from app.model import Deck
 from app.model import helper
 
 from app.core import Ranking
@@ -33,15 +34,23 @@ def view_tournament(tid):
     tournament = session.query(Tournament).filter(Tournament.id == tid).one()
     games = session.query(Game).filter(Game.tournament_id == tid).order_by(Game.id.asc()).all()
     players = session.query(Player).all()
+    decks = session.query(Deck).all()
 
     players_map = {}
+    decks_map = {}
     pmap = {}
 
     for player in players:
         players_map[player.id] = player
 
+    for deck in decks:
+        decks_map[deck.id] = deck
+
     for p in participants:
-        pmap[p.id] = players_map[p.player_id]
+        pmap[p.id] = {
+            'player': players_map[p.player_id],
+            'deck': decks_map[p.deck_id]
+        }
 
     data = Ranking().get_tournament_ranking(tid)
 

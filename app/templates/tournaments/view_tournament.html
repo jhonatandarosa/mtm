@@ -27,22 +27,24 @@
             {% for game in round %}
                 {% set p1class = 'teal lighten-5' if game.p1_wins > game.p2_wins else '' %}
                 {% set p2class = 'teal lighten-5' if game.p2_wins > game.p1_wins else '' %}
+                {% set p1 = participants[game.p1_id]['player'] %}
+                {% set p2 = participants[game.p2_id]['player'] %}
                 <div class="col m{{ cols }}">
                     <table class="bordered game">
                         <tr>
-                            <td class="{{ p1class }}">{{ participants[game.p1_id].name }}</td>
+                            <td class="{{ p1class }}">{{ p1.name }}</td>
                             <td class="{{ p1class }}">{{ game.p1_wins }}</td>
                             {% if admin %}
                                 <td rowspan="2" class="score-edit">
                                     <a class="btn-floating waves-effect waves-light"
-                                       onclick="editGame({{ game.id }}, '{{ participants[game.p1_id].name }}', {{ game.p1_wins }}, '{{ participants[game.p2_id].name }}', {{ game.p2_wins }})">
+                                       onclick="editGame({{ game.id }}, '{{ p1.name }}', {{ game.p1_wins }}, '{{ p2.name }}', {{ game.p2_wins }})">
                                         <i class="material-icons">edit</i>
                                     </a>
                                 </td>
                             {% endif %}
                         </tr>
                         <tr>
-                            <td class="{{ p2class }}">{{ participants[game.p2_id].name }}</td>
+                            <td class="{{ p2class }}">{{ p2.name }}</td>
                             <td class="{{ p2class }}">{{ game.p2_wins }}</td>
                         </tr>
                     </table>
