@@ -20,12 +20,12 @@ def create_stats():
 
 def ranking_sort(a, b):
     # match wins
-    if a['mw'] != b['mw']:
-        return -1 if a['mw'] > b['mw'] else 1
-    else:
+    # if a['mw'] != b['mw']:
+    #     return -1 if a['mw'] > b['mw'] else 1
+    # else:
         # games points diff
-        if a['pts'] != b['pts']:
-            return -1 if a['pts'] > b['pts'] else 1
+    if a['pts'] != b['pts']:
+        return -1 if a['pts'] > b['pts'] else 1
 
     return 0
 
@@ -42,6 +42,21 @@ def ranking(data):
 
     return rank
 
+def calc_points(wins, loses):
+    pts = wins * 3
+
+    if wins > loses and wins > 0:
+        pts += 3
+
+    drawn = wins == loses
+    finished = wins == 2 or loses == 2
+
+    if drawn or not finished:
+        pts += 1
+    elif pts > 0 and loses > 0:
+        pts -= 1
+
+    return pts
 
 class Ranking:
     players = []
@@ -71,13 +86,15 @@ class Ranking:
                 if p not in parts_stats:
                     parts_stats[p] = create_stats()
 
-                pts = entry[0][1] - entry[1][1]
+                wins = entry[0][1]
+                loses = entry[1][1]
+                pts = calc_points(wins, loses)
 
-                parts_stats[p]['w'] += entry[0][1]
-                parts_stats[p]['l'] += entry[1][1]
+                parts_stats[p]['w'] += wins
+                parts_stats[p]['l'] += loses
                 parts_stats[p]['pts'] += pts
-                parts_stats[p]['mw'] += 1 if pts > 0 else 0
-                parts_stats[p]['ml'] += 1 if pts < 0 else 0
+                parts_stats[p]['mw'] += 1 if wins > loses else 0
+                parts_stats[p]['ml'] += 1 if loses > wins else 0
 
         participants = session.query(Participant).all()
 
