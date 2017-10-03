@@ -32,5 +32,6 @@ from app.core import Ranking
 # init ranking
 Ranking().refresh()
 
-from app.core import TournamentManager
+# from app.core import TournamentManager
+
 # TournamentManager().test()

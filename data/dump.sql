@@ -133,17 +133,28 @@ INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
 -- rounds
 INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   -- round 1
-  (4, 1, 21, 22, 0, 0),
-  (4, 1, 20, 19, 0, 0),
+  (4, 1, 21, 22, 2, 0),
+  (4, 1, 20, 19, 0, 2),
   -- round 2
-  (4, 2, 22, 20, 0, 0),
-  (4, 2, 18, 21, 0, 0),
+  (4, 2, 22, 20, 0, 2),
+  (4, 2, 18, 21, 2, 0),
   -- round 3
-  (4, 3, 20, 18, 0, 0),
-  (4, 3, 19, 22, 0, 0),
+  (4, 3, 20, 18, 2, 0),
+  (4, 3, 19, 22, 2, 0),
   -- round 4
-  (4, 4, 18, 19, 0, 0),
+  (4, 4, 18, 19, 2, 1),
   (4, 4, 21, 20, 0, 0),
   -- round 5
-  (4, 5, 19, 21, 0, 0),
-  (4, 5, 22, 18, 0, 0);
+  (4, 5, 19, 21, 1, 2),
+  (4, 5, 22, 18, 2, 0);
+
+
+
+-- support for two headed giant
+alter table tournament ADD COLUMN type INT NULL;
+update tournament set type = 1 where id <= 4;
+
+alter table participant ADD COLUMN player2_id INT(11) NULL;
+alter table participant ADD constraint FOREIGN KEY(player2_id) REFERENCES player(id);
+alter table participant ADD COLUMN deck2_id INT(11) NULL;
+alter table participant ADD constraint FOREIGN KEY(deck2_id) REFERENCES deck(id);

@@ -10,6 +10,7 @@ from app.core import Ranking
 from app.model import Deck
 from app.model import Participant
 from app.model import Tournament
+from app.model import Game
 
 
 class TournamentType(Enum):
@@ -83,15 +84,19 @@ class TournamentManager:
 
         return matches
 
-    def new_tournament(self, tournament_type, **kwargs):
+    def new_tournament(self, tournament_type, name, players_ids):
         decks = self.get_available_decks_for_next_tournament()
 
-        players = [1, 2, 3, 4]
+        matches = self.match_decks_and_players(decks, players_ids)
 
-        matches = self.match_decks_and_players(decks, players)
+        session = Session()
 
         tournament = Tournament()
-        # tournament.type = tournament_type.value
+        tournament.name = name
+        tournament.type = tournament_type.value
+
+        session.add(tournament)
+        session.commit()
 
         participants = []
         if tournament_type == TournamentType.SINGLE:
@@ -102,6 +107,7 @@ class TournamentManager:
                 p.player_id = match[0]
                 p.deck_id = match[1]
                 participants.append(p)
+                session.add(p)
 
         elif tournament_type == TournamentType.TWO_HEADED_GIANT:
             pairs = list(itertools.combinations(matches, 2))
@@ -112,16 +118,32 @@ class TournamentManager:
                 p.tournament_id = tournament.id
                 p.player_id = m1[0]
                 p.deck_id = m1[1]
-                # p.player2_id = m2[0]
-                # p.deck2_id = m2[1]
+                p.player2_id = m2[0]
+                p.deck2_id = m2[1]
                 participants.append(p)
+                session.add(p)
 
+        session.commit()
         pairs = list(itertools.combinations(participants, 2))
 
-        games = []
+        # left = pairs[::2]
+        # right = pairs[::-1][1::2]
 
-    def test(self):
-        self.new_tournament(TournamentType.SINGLE)
+        # FIXME tournament with more than 4 players
+        games = []
+        for i, g in enumerate(pairs):
+            game = Game()
+            game.tournament_id = tournament.id
+            game.p1_wins = 0
+            game.p2_wins = 0
+            game.round = i + 1
+            game.p1_id = g[0].id
+            game.p2_id = g[1].id
+
+            games.append(game)
+            session.add(game)
+
+        session.commit()
 
 
 TournamentManager = SingletonDecorator(TournamentManager)

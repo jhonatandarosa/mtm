@@ -13,26 +13,14 @@ bp = Blueprint('blueprint_%s' % __name__, __name__)
 @bp.route('/api/tournaments', methods=['POST'])
 def new_tournament():
     payload = request.json
-    params = ['p1Wins', 'p2Wins']
+    params = ['name', 'type', 'players']
     for param in params:
         if param not in payload:
             abort(400)
 
-    p1_wins = payload['p1Wins']
-    p2_wins = payload['p2Wins']
-
-    if not 0 <= p1_wins <= 2:
-        abort(400)
-
-    if not 0 <= p2_wins <= 2:
-        abort(400)
-
-    session = Session()
-    game = session.query(Game).filter(Game.id == gameId).one()
-    game.p1_wins = p1_wins
-    game.p2_wins = p2_wins
-    session.add(game)
-    session.commit()
+    name = payload['name']
+    type = payload['type']
+    players = payload['players']
 
     Ranking().refresh()
 
