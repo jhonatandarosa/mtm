@@ -10,8 +10,8 @@ from app.core import Ranking
 bp = Blueprint('blueprint_%s' % __name__, __name__)
 
 
-@bp.route('/api/games/<int:gameId>', methods=['PUT'])
-def update_game(gameId):
+@bp.route('/api/tournaments', methods=['POST'])
+def new_tournament():
     payload = request.json
     params = ['p1Wins', 'p2Wins']
     for param in params:
