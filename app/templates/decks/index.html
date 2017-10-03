@@ -5,7 +5,7 @@
 
 {% block body %}
 
-    {% with participants = decks %}
+    {% with participants = decks, is_participant = False %}
     {% include 'ranking/table_view.html' %}
     {% endwith %}
 

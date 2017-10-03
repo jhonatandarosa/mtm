@@ -121,7 +121,7 @@ class TournamentManager:
         games = []
 
     def test(self):
-        self.new_tournament(TournamentType.TWO_HEADED_GIANT)
+        self.new_tournament(TournamentType.SINGLE)
 
 
 TournamentManager = SingletonDecorator(TournamentManager)

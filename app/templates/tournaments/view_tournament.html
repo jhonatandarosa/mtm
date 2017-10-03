@@ -11,7 +11,7 @@
 
     <h2>{{ tournament.name }}</h2>
     <h4>Scores</h4>
-    {% with ranking = data %}
+    {% with ranking = data, is_participant = True %}
         {% include 'ranking/table_view.html' %}
     {% endwith %}
     <br/>

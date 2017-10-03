@@ -12,7 +12,7 @@
         <button data-target="modal1" class="btn modal-trigger">New</button>
     {% endif %}
 
-    {% with participants = players %}
+    {% with participants = players, is_participant = False %}
     {% include 'ranking/table_view.html' %}
     {% endwith %}
 
