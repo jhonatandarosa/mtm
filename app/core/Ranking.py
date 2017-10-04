@@ -48,10 +48,11 @@ def calc_points(wins, loses):
     if wins > loses and wins > 0:
         pts += 3
 
+    played = wins > 0 or loses > 0
     drawn = wins == loses
     finished = wins == 2 or loses == 2
 
-    if drawn or not finished:
+    if played and (drawn or not finished):
         pts += 1
     elif pts > 0 and loses > 0:
         pts -= 1

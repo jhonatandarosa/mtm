@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
     {% if admin %}
-        <link href="/static/css/tournaments.css" rel="stylesheet"/>
         <script src="/static/js/tournaments.js"></script>
     {% endif %}
 {% endblock %}
@@ -25,7 +24,7 @@
         </div>
 
         <!-- Modal Structure -->
-        <div id="modal1" class="modal bottom-sheet">
+        <div id="modal1" class="modal">
             <div class="modal-content">
                 <h4>New Tournament</h4>
                 <div class="input-field col s6">
@@ -33,18 +32,25 @@
                     <label for="name">Name</label>
                 </div>
                 <div class="input-field col s12">
-                    <select>
+                    <select id="type">
                         <option value="" disabled selected>Choose your option</option>
-                        <option value="1">Option 1</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
+                        <option value="1">Single</option>
+                        <option value="2">Two Headed Giant</option>
                     </select>
-                    <label>Materialize Select</label>
+                    <label>Tournament Type</label>
+                </div>
+                <div class="row">
+                    {% for player in players %}
+                        <div class="col m6">
+                            <input type="checkbox" id="player_{{ player.id }}"/>
+                            <label for="player_{{ player.id }}">{{ player.name }}</label>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-                <a onclick="createPlayer()"
+                <a onclick="createTournament()"
                    class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
             </div>
         </div>
@@ -58,6 +64,7 @@
             $(document).ready(function () {
                 // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
                 $('.modal').modal();
+                $('select').material_select();
             });
         </script>
     {% endif %}

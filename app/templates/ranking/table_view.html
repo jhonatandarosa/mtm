@@ -17,14 +17,29 @@
     <tbody>
     {% for rank in ranking %}
         {% set p = participants[rank['id']] %}
+        {% if is_participant %}
+            {% set p1 = p['player'] %}
+            {% set d1 = p['deck'] %}
+
+            {% set team_name = p1.name %}
+            {% set deck_name = d1.name %}
+
+            {% if is_thg %}
+                {% set p2 = p['player2'] %}
+                {% set d2 = p['deck2'] %}
+
+                {% set team_name = team_name + ', ' + p2.name %}
+                {% set deck_name = deck_name + ', ' + d2.name %}
+            {% endif %}
+        {% else %}
+            {% set team_name = p.name %}
+        {% endif %}
         <tr>
             <td>
+                <span>{{ team_name }}</span>
                 {% if is_participant %}
-                    <span>{{ p['player'].name }}</span>
                     <br/>
-                    <span class="blue-text text-darken-2">{{ p['deck'].name }}</span>
-                {% else %}
-                    <span>{{ p.name }}</span>
+                    <span class="blue-text text-darken-2">{{ deck_name }}</span>
                 {% endif %}
             </td>
             {% if show_t_wins %}

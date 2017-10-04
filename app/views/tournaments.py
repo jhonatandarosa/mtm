@@ -20,10 +20,16 @@ bp = Blueprint('blueprint_%s' % __name__, __name__, url_prefix='/tournaments', t
 def index_view():
     session = Session()
     tournaments = session.query(Tournament).order_by(Tournament.id.desc()).all()
+    players = session.query(Player).order_by(Player.name.asc()).all()
 
     admin = request.args.get('admin', '') == 'True'
 
-    return render_template('tournaments/index.html', admin=admin, tournaments=tournaments)
+    return render_template(
+        'tournaments/index.html',
+        admin=admin,
+        tournaments=tournaments,
+        players=players
+    )
 
 
 @bp.route('/<int:tid>')
@@ -51,6 +57,11 @@ def view_tournament(tid):
             'player': players_map[p.player_id],
             'deck': decks_map[p.deck_id]
         }
+
+        if p.player2_id is not None:
+            pmap[p.id]['player2'] = players_map[p.player2_id]
+            pmap[p.id]['deck2'] = decks_map[p.deck_id]
+
 
     data = Ranking().get_tournament_ranking(tid)
 

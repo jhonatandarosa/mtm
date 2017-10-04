@@ -10,10 +10,8 @@ class Participant(db.Model):
     deck2_id = db.Column(db.Integer, db.ForeignKey('deck.id'))
 
     __table_args__ = (
-        db.UniqueConstraint('player_id', 'tournament_id', name='uix_player_tournament'),
-        db.UniqueConstraint('player2_id', 'tournament_id', name='uix_player2_tournament'),
-        db.UniqueConstraint('deck_id', 'tournament_id', name='uix_deck_tournament'),
-        db.UniqueConstraint('deck2_id', 'tournament_id', name='uix_deck2_tournament'),
+        db.UniqueConstraint('player_id', 'player2_id', 'tournament_id', name='uix_players_tournament'),
+        db.UniqueConstraint('deck_id', 'deck2_id', 'tournament_id', name='uix_decks_tournament'),
         db.CheckConstraint('player_id <> player2_id', name='ck_players'),
         db.CheckConstraint('deck_id <> deck2_id', name='ck_decks')
     )

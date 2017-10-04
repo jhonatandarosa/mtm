@@ -7,6 +7,8 @@ from app import Session
 from app.model import Game
 from app.model import Tournament
 from app.core import Ranking
+from app.core import TournamentType
+from app.core import TournamentManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__)
 
@@ -22,6 +24,24 @@ def new_tournament():
     name = payload['name']
     type = payload['type']
     players = payload['players']
+
+    if name.strip() == '':
+        abort(400)
+
+    if len(players) < 4:
+        abort(400)
+
+    ttype = None
+    if type == TournamentType.SINGLE.value:
+        ttype = TournamentType.SINGLE
+    elif type == TournamentType.TWO_HEADED_GIANT.value:
+        ttype = TournamentType.TWO_HEADED_GIANT
+
+    if ttype is None:
+        abort(400)
+
+    manager = TournamentManager()
+    manager.new_tournament(ttype, name, players)
 
     Ranking().refresh()
 

@@ -8,7 +8,7 @@
 {% block section %}Tournaments{% endblock %}
 
 {% block body %}
-
+    {% set is_thg = tournament.type == 2 %}
     <h2>{{ tournament.name }}</h2>
     <h4>Scores</h4>
     {% with ranking = data, is_participant = True %}
@@ -29,22 +29,30 @@
                 {% set p2class = 'teal lighten-5' if game.p2_wins > game.p1_wins else '' %}
                 {% set p1 = participants[game.p1_id]['player'] %}
                 {% set p2 = participants[game.p2_id]['player'] %}
+
+                {% set t1_name = p1.name %}
+                {% set t2_name = p2.name %}
+
+                {% if is_thg %}
+                    {% set t1_name = t1_name + ', ' + participants[game.p1_id]['player2'].name %}
+                    {% set t2_name = t2_name + ', ' + participants[game.p2_id]['player2'].name %}
+                {% endif %}
                 <div class="col m{{ cols }}">
                     <table class="bordered game">
                         <tr>
-                            <td class="{{ p1class }}">{{ p1.name }}</td>
+                            <td class="{{ p1class }}">{{ t1_name }}</td>
                             <td class="{{ p1class }}">{{ game.p1_wins }}</td>
                             {% if admin %}
                                 <td rowspan="2" class="score-edit">
                                     <a class="btn-floating waves-effect waves-light"
-                                       onclick="editGame({{ game.id }}, '{{ p1.name }}', {{ game.p1_wins }}, '{{ p2.name }}', {{ game.p2_wins }})">
+                                       onclick="editGame({{ game.id }}, '{{ t1_name }}', {{ game.p1_wins }}, '{{ t2_name }}', {{ game.p2_wins }})">
                                         <i class="material-icons">edit</i>
                                     </a>
                                 </td>
                             {% endif %}
                         </tr>
                         <tr>
-                            <td class="{{ p2class }}">{{ p2.name }}</td>
+                            <td class="{{ p2class }}">{{ t2_name }}</td>
                             <td class="{{ p2class }}">{{ game.p2_wins }}</td>
                         </tr>
                     </table>
@@ -62,7 +70,8 @@
                 <i class="material-icons">menu</i>
             </a>
             <ul>
-                <li><a class="btn-floating red" ><i class="material-icons">done</i></a></li>
+                <li><a class="btn-floating red" onclick="finishTournament({{ tournament.id }})"><i
+                        class="material-icons">done</i></a></li>
             </ul>
         </div>
 

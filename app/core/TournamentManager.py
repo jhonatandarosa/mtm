@@ -93,6 +93,7 @@ class TournamentManager:
 
         tournament = Tournament()
         tournament.name = name
+        tournament.status = 'active'
         tournament.type = tournament_type.value
 
         session.add(tournament)
@@ -100,7 +101,7 @@ class TournamentManager:
 
         participants = []
         if tournament_type == TournamentType.SINGLE:
-
+            team = matches
             for match in matches:
                 p = Participant()
                 p.tournament_id = tournament.id
@@ -109,11 +110,13 @@ class TournamentManager:
                 participants.append(p)
                 session.add(p)
 
+            rounds = list(itertools.combinations(participants, 2))
+
         elif tournament_type == TournamentType.TWO_HEADED_GIANT:
-            pairs = list(itertools.combinations(matches, 2))
-            for pair in pairs:
-                m1 = pair[0]
-                m2 = pair[1]
+            teams = list(itertools.combinations(matches, 2))
+            for team in teams:
+                m1 = team[0]
+                m2 = team[1]
                 p = Participant()
                 p.tournament_id = tournament.id
                 p.player_id = m1[0]
@@ -123,15 +126,25 @@ class TournamentManager:
                 participants.append(p)
                 session.add(p)
 
-        session.commit()
-        pairs = list(itertools.combinations(participants, 2))
+            r = len(matches) - 1
+            left = participants[:r]
+            right = participants[::-1][:-r]
+            rounds = []
 
-        # left = pairs[::2]
-        # right = pairs[::-1][1::2]
+            for i in range(0, len(left)):
+                l = left[i]
+                r = right[i]
+                rounds.append((l, r))
+
+        session.commit()
+
+        # n = len(participants)
+        # is_even = n % 2 == 0
+        # rounds = n-1 if is_even else n
 
         # FIXME tournament with more than 4 players
         games = []
-        for i, g in enumerate(pairs):
+        for i, g in enumerate(rounds):
             game = Game()
             game.tournament_id = tournament.id
             game.p1_wins = 0
