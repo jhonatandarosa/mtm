@@ -1,0 +1,7 @@
+2x0 = 9 pontos (6 games + 3 match)
+2x1 = 8 pontos (6 games + 3 match - 1 game lost)
+1x0 = 7 pontos (3 game + 3 match + 1 game não terminado)
+1x1 = 4 ponto (3 game + 1 empate)
+1x2 = 2 pontos (3 game - 1 game lost)
+0x1 = 1 ponto (game não terminado)
+0x2 = 0 pontos

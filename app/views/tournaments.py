@@ -60,7 +60,7 @@ def view_tournament(tid):
 
         if p.player2_id is not None:
             pmap[p.id]['player2'] = players_map[p.player2_id]
-            pmap[p.id]['deck2'] = decks_map[p.deck_id]
+            pmap[p.id]['deck2'] = decks_map[p.deck2_id]
 
 
     data = Ranking().get_tournament_ranking(tid)

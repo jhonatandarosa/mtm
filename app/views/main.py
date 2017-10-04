@@ -46,6 +46,10 @@ def index_view():
             'deck': decks_map[p.deck_id]
         }
 
+        if p.player2_id is not None:
+            pmap[p.id]['player2'] = players_map[p.player2_id]
+            pmap[p.id]['deck2'] = decks_map[p.deck2_id]
+
     admin = request.args.get('admin', '') == 'True'
 
     data = Ranking().get_tournament_ranking(tid)
