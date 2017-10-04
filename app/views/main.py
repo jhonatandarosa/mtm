@@ -18,7 +18,10 @@ main = Blueprint('blueprint_%s' % __name__, __name__, template_folder='templates
 @main.route('/')
 def index_view():
     session = Session()
-    tournament = session.query(Tournament).filter(Tournament.status == 'active').one()
+    tournament = session.query(Tournament).filter(Tournament.status == 'active').first()
+    if tournament is None:
+        return render_template('main.html')
+
     tid = tournament.id
 
     participants = session.query(Participant).filter(Participant.tournament_id == tid).all()
