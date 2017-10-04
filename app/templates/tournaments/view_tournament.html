@@ -56,6 +56,16 @@
 
 
     {% if admin %}
+        <!-- Actions-->
+        <div class="fixed-action-btn horizontal click-to-toggle">
+            <a class="btn-floating btn-large red">
+                <i class="material-icons">menu</i>
+            </a>
+            <ul>
+                <li><a class="btn-floating red" onclick="finishTournament({{ tournament.id }})"><i class="material-icons">done</i></a></li>
+            </ul>
+        </div>
+
         <!-- Modal Structure -->
         <div id="editGame" class="modal score-edit">
             <div class="modal-content">

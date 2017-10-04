@@ -37,3 +37,23 @@ function saveGame() {
         }
     });
 }
+
+function finishTournament(tid) {
+    const payload = {
+        status: 'finished'
+    };
+
+    $.ajax({
+        type: 'PUT',
+        url: '/api/tournaments/'+tid +'/status',
+        data: JSON.stringify(payload),
+        contentType: "application/json; charset=utf-8",
+        success: () => {
+            Materialize.toast('Finished!', 4000);
+            window.location.reload()
+        },
+        error: (xhr, status, error) => {
+            Materialize.toast('Error changing status!', 4000);
+        }
+    });
+}
