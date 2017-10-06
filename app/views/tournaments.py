@@ -62,7 +62,6 @@ def view_tournament(tid):
             pmap[p.id]['player2'] = players_map[p.player2_id]
             pmap[p.id]['deck2'] = decks_map[p.deck2_id]
 
-
     data = Ranking().get_tournament_ranking(tid)
 
     rounds = helper.group_by_round(games)

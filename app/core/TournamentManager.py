@@ -1,6 +1,7 @@
 from enum import Enum
 import random
 import itertools
+import functools
 
 from .SingletonDecorator import SingletonDecorator
 
@@ -28,6 +29,7 @@ class TournamentManager:
 
         ds = session.query(Deck).all()
         parts = session.query(Participant).all()
+        tournaments = session.query(Tournament).filter(Tournament.status == 'finished').order_by(Tournament.id.asc()).all()
 
         decks = {}
         participants = {}
@@ -40,8 +42,9 @@ class TournamentManager:
             decks[deck.id] = deck
             result.append(deck)
 
-        for tid in Ranking().tournaments:
-            t = Ranking().get_tournament_ranking(tid)
+        ranking = Ranking()
+        for tournament in tournaments:
+            t = ranking.get_tournament_ranking(tournament.id)
             winner = self.get_winner(t)
 
             participant = participants[winner]
@@ -49,17 +52,32 @@ class TournamentManager:
 
             result.remove(deck)
 
+        # sort decks
+        play_map = {}
+        for deck_data in ranking.decks:
+            w = deck_data['w']
+            l = deck_data['l']
+
+            play_map[deck_data['id']] = w + l
+
+        def deck_sort(a, b):
+            ga = play_map[a.id]
+            gb = play_map[b.id]
+
+            return (ga > gb) - (ga < gb)
+
+        result.sort(key=functools.cmp_to_key(deck_sort))
         return result
 
     def get_last_decks_from_player(self, player):
         d = []
 
         session = Session()
-        parts = session.query(Participant) \
+        parts = session.query(Participant.deck_id) \
             .filter(Participant.player_id == player) \
             .order_by(Participant.id.desc()) \
             .limit(2) \
-            .all()
+            .distinct(Participant.deck_id)
 
         for p in parts:
             d.append(p.deck_id)
@@ -67,7 +85,7 @@ class TournamentManager:
         return d
 
     def match_decks_and_players(self, decks, players):
-        random.shuffle(decks)
+        random.shuffle(players)
 
         matches = []
 
@@ -76,13 +94,85 @@ class TournamentManager:
 
             possible_decks = [d for d in decks if d.id not in last_decks]
 
-            random.shuffle(possible_decks)
             deck = possible_decks[0]
             decks.remove(deck)
 
             matches.append((player, deck.id))
 
         return matches
+
+    def generate_schedule_single(self, matches):
+        participants = []
+
+        for match in matches:
+            p = Participant()
+            p.player_id = match[0]
+            p.deck_id = match[1]
+            participants.append(p)
+
+        n = len(participants)
+        is_even = n % 2 == 0
+        is_odd = not is_even
+        rounds = n - 1 if is_even else n
+        games_count = int(n / 2 * (n - 1))
+
+        competitors = []
+        competitors.extend(participants)
+        if is_odd:
+            competitors.append(None)
+
+        games_per_round = int(len(competitors) / 2)
+
+        schedule = []
+
+        for r in range(0, rounds):
+            left = competitors[:games_per_round]
+            right = competitors[::-1][:games_per_round]
+
+            pairs = zip(left, right)
+            ss = [{'round': r, 'p1': pair[0], 'p2': pair[1]} for pair in pairs if
+                  pair[0] is not None and pair[1] is not None]
+            schedule.extend(ss)
+
+            competitors = [left[0]] + [right[0]] + left[1:] + right[1:]
+
+        return schedule, participants
+
+    def generate_schedule_thg(self, matches):
+        participants = []
+        teams = list(itertools.combinations(matches, 2))
+        for team in teams:
+            m1 = team[0]
+            m2 = team[1]
+            p = Participant()
+            p.player_id = m1[0]
+            p.deck_id = m1[1]
+            p.player2_id = m2[0]
+            p.deck2_id = m2[1]
+            participants.append(p)
+
+        r = len(matches) - 1
+        left = participants[:r]
+        right = participants[::-1][:-r]
+        schedule = []
+
+        for i in range(0, len(left)):
+            l = left[i]
+            r = right[i]
+            schedule.append({
+                'round': i + 1,
+                'p1': l,
+                'p2': r
+            })
+
+        return schedule, participants
+
+    def generate_schedule(self, tournament_type, matches):
+
+        if tournament_type == TournamentType.SINGLE:
+            return self.generate_schedule_single(matches)
+        elif tournament_type == TournamentType.TWO_HEADED_GIANT:
+            return self.generate_schedule_thg(matches)
 
     def new_tournament(self, tournament_type, name, players_ids):
         decks = self.get_available_decks_for_next_tournament()
@@ -99,64 +189,25 @@ class TournamentManager:
         session.add(tournament)
         session.commit()
 
-        participants = []
-        if tournament_type == TournamentType.SINGLE:
-            team = matches
-            for match in matches:
-                p = Participant()
-                p.tournament_id = tournament.id
-                p.player_id = match[0]
-                p.deck_id = match[1]
-                participants.append(p)
-                session.add(p)
+        schedule, participants = self.generate_schedule(tournament_type, matches)
 
-            rounds = list(itertools.combinations(participants, 2))
-
-        elif tournament_type == TournamentType.TWO_HEADED_GIANT:
-            teams = list(itertools.combinations(matches, 2))
-            for team in teams:
-                m1 = team[0]
-                m2 = team[1]
-                p = Participant()
-                p.tournament_id = tournament.id
-                p.player_id = m1[0]
-                p.deck_id = m1[1]
-                p.player2_id = m2[0]
-                p.deck2_id = m2[1]
-                participants.append(p)
-                session.add(p)
-
-            r = len(matches) - 1
-            left = participants[:r]
-            right = participants[::-1][:-r]
-            rounds = []
-
-            for i in range(0, len(left)):
-                l = left[i]
-                r = right[i]
-                rounds.append((l, r))
+        for participant in participants:
+            participant.tournament_id = tournament.id
+            session.add(participant)
 
         session.commit()
 
-        # n = len(participants)
-        # is_even = n % 2 == 0
-        # rounds = n-1 if is_even else n
-
-        # FIXME tournament with more than 4 players
-        games = []
-        for i, g in enumerate(rounds):
+        for s in schedule:
             game = Game()
             game.tournament_id = tournament.id
             game.p1_wins = 0
             game.p2_wins = 0
-            game.round = i + 1
-            game.p1_id = g[0].id
-            game.p2_id = g[1].id
-
-            games.append(game)
+            game.round = s['round']
+            game.p1_id = s['p1'].id
+            game.p2_id = s['p2'].id
             session.add(game)
 
-        session.commit()
+            session.commit()
 
 
 TournamentManager = SingletonDecorator(TournamentManager)

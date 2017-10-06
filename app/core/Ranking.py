@@ -7,8 +7,9 @@ from app.model import Player
 from app.model import Game
 from app.model import Participant
 from app.model import Tournament
+from app.model import Deck
 
-sts = ['mw', 'ml', 'w', 'l', 'pts']
+sts = ['mw', 'ml', 'w', 'l', 'pts', 't']
 
 
 def create_stats():
@@ -68,6 +69,7 @@ class Ranking:
         session = Session()
         session.flush()
         games = session.query(Game).order_by(Game.id.asc()).all()
+        decks = session.query(Deck).order_by(Deck.id.asc()).all()
         ts = session.query(Tournament).all()
 
         ts_map = {}
@@ -136,6 +138,12 @@ class Ranking:
 
         self.players = ranking(players_stats)
         self.decks = ranking(decks_stats)
+
+        for deck in decks:
+            if deck.id not in decks_stats:
+                dstats = create_stats()
+                dstats['id'] = deck.id
+                self.decks.append(dstats)
 
         self.tournaments = {}
         for tid in tournament_stats:
