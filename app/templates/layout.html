@@ -29,8 +29,8 @@
 </nav>
 
 <div class="container">
-{% block body %}
-{% endblock %}
+    {% block body %}
+    {% endblock %}
 </div>
 
 
@@ -39,6 +39,14 @@
 <!-- Compiled and minified JavaScript -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
+<script>
+    $(document).ready(function () {
+        // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+        $('select').material_select();
+        $('ul.tabs').tabs();
+    });
+</script>
 {% block scripts %}
 {% endblock %}
 </body>

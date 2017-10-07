@@ -12,8 +12,8 @@
         <button data-target="modal1" class="btn modal-trigger">New</button>
     {% endif %}
 
-    {% with participants = players, is_participant = False %}
-    {% include 'ranking/table_view.html' %}
+    {% with table_data = rank_table %}
+        {% include 'ranking/table_view.html' %}
     {% endwith %}
 
     {% if admin %}
@@ -32,15 +32,5 @@
                    class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
             </div>
         </div>
-    {% endif %}
-{% endblock %}
-{% block scripts %}
-    {% if admin %}
-        <script>
-            $(document).ready(function () {
-                // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-                $('.modal').modal();
-            });
-        </script>
     {% endif %}
 {% endblock %}

@@ -1,22 +1,15 @@
-from enum import Enum
-import random
-import itertools
 import functools
-
-from .SingletonDecorator import SingletonDecorator
+import itertools
+import random
 
 from app import Session
 from app.core import Ranking
-
 from app.model import Deck
+from app.model import Game
 from app.model import Participant
 from app.model import Tournament
-from app.model import Game
-
-
-class TournamentType(Enum):
-    SINGLE = 1
-    TWO_HEADED_GIANT = 2
+from app.model import TournamentType
+from .SingletonDecorator import SingletonDecorator
 
 
 class TournamentManager:
@@ -27,9 +20,10 @@ class TournamentManager:
     def get_available_decks_for_next_tournament(self):
         session = Session()
 
-        ds = session.query(Deck).all()
+        ds = session.query(Deck).filter(Deck.status == 'active').all()
         parts = session.query(Participant).all()
-        tournaments = session.query(Tournament).filter(Tournament.status == 'finished').order_by(Tournament.id.asc()).all()
+        tournaments = session.query(Tournament).filter(Tournament.status == 'finished').order_by(
+            Tournament.id.asc()).all()
 
         decks = {}
         participants = {}

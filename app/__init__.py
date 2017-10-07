@@ -33,6 +33,6 @@ from app.core import Ranking
 Ranking().refresh()
 
 # from app.core import TournamentManager
-# from app.core import TournamentType
+# from app.model import TournamentType
 
 # TournamentManager().new_tournament(TournamentType.TWO_HEADED_GIANT, '1° Two Headed Giants', [1, 2, 3, 4])

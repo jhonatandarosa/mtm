@@ -6,8 +6,8 @@ from flask import abort
 from app import Session
 from app.model import Game
 from app.model import Tournament
+from app.model import TournamentType
 from app.core import Ranking
-from app.core import TournamentType
 from app.core import TournamentManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__)

@@ -16,18 +16,22 @@ def index_view():
     session = Session()
     players = session.query(Player).all()
 
-    players_map = {}
+    team = {}
 
     for player in players:
-        players_map[player.id] = player
+        team[player.id] = {
+            'name': player.name
+        }
 
     admin = request.args.get('admin', '') == 'True'
 
-    rank = Ranking().players
+    ranking = Ranking()
+
+    table = ranking.ranking_table(ranking.players, True)
 
     return render_template(
         'players/index.html',
         admin=admin,
-        players=players_map,
-        ranking=rank
+        rank_table=table,
+        teams=team
     )

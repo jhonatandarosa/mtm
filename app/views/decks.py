@@ -16,12 +16,26 @@ def index_view():
     session = Session()
     decks = session.query(Deck).all()
 
-    result = {}
+    team = {}
+
     for deck in decks:
-        result[deck.id] = deck
+        _class = ''
+        if deck.status == 'inactive':
+            _class = 'red lighten-5'
+        team[deck.id] = {
+            'name': deck.name,
+            '_class': _class
+        }
 
     admin = request.args.get('admin', '') == 'True'
 
-    rank = Ranking().decks
+    ranking = Ranking()
 
-    return render_template('decks/index.html', admin=admin, decks=result, ranking=rank)
+    table = ranking.ranking_table(ranking.decks, True)
+
+    return render_template(
+        'decks/index.html',
+        admin=admin,
+        rank_table=table,
+        teams=team
+    )

@@ -1,0 +1,61 @@
+{% for round in rounds %}
+    {% set cols = round|count %}
+    {% set cols = 12/cols %}
+    {% set cols = cols|round|int %}
+    <p>Round {{ loop.index }}</p>
+    <hr/>
+    <div class="row">
+
+        {% for game in round %}
+
+            {% set p1class = 'teal lighten-5' if game.p1_wins > game.p2_wins else '' %}
+            {% set p2class = 'teal lighten-5' if game.p2_wins > game.p1_wins else '' %}
+            {% set t1 = teams[game.p1_id]['name'] %}
+            {% set t2 = teams[game.p2_id]['name'] %}
+
+            <div class="col m{{ cols }}">
+                <table class="bordered game">
+                    <tr>
+                        <td class="{{ p1class }}">{{ t1 }}</td>
+                        <td class="{{ p1class }}">{{ game.p1_wins }}</td>
+                        {% if admin %}
+                            <td rowspan="2" class="score-edit">
+                                <a class="btn-floating waves-effect waves-light"
+                                   onclick="editGame({{ game.id }}, '{{ t1 }}', {{ game.p1_wins }}, '{{ t2 }}', {{ game.p2_wins }})">
+                                    <i class="material-icons">edit</i>
+                                </a>
+                            </td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td class="{{ p2class }}">{{ t2 }}</td>
+                        <td class="{{ p2class }}">{{ game.p2_wins }}</td>
+                    </tr>
+                </table>
+            </div>
+        {% endfor %}
+    </div>
+    <br/>
+{% endfor %}
+
+{% if admin %}
+    <!-- Modal Structure -->
+    <div id="editGame" class="modal score-edit">
+        <div class="modal-content">
+            <h4>Edit Game</h4>
+            <div class="row">
+                <div class="input-field col s5">
+                    <input id="p1Wins" type="text" class="validate">
+                    <label id="p1Name" for="name"></label>
+                </div>
+                <span class="col s2">X</span>
+                <div class="input-field col s5">
+                    <input id="p2Wins" type="text" class="validate">
+                    <label id="p2Name" for="name"></label>
+                </div>
+                <a class="modal-action modal-close waves-effect waves-green btn-flat right"
+                   onclick="saveGame()">Save</a>
+            </div>
+        </div>
+    </div>
+{% endif %}

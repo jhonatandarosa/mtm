@@ -1,67 +1,34 @@
-{% set rc = ranking|count %}
-{% set show_t_wins = rc > 0 and 't' in ranking[0] %}
+{% set rows = table_data['rows'] %}
+{% set cols = table_data['cols'] %}
+{% set headers = table_data['headers'] %}
+{% set rc = rows|count %}
+{% set rc2 = headers|count %}
+{% set rc3 = headers|count %}
+{#{% set show_t_wins = rc > 0 and 't' in ranking[0] %}#}
 <table class="bordered highlight">
     <thead>
     <tr>
-        <th>Name</th>
-        {% if show_t_wins %}
-            <th>Tournaments</th>
-        {% endif %}
-        <th>Match Wins</th>
-        <th>Match Lost</th>
-        <th>Set Wins</th>
-        <th>Set Lost</th>
-        <th>Points</th>
+        {% for header in headers %}
+            <th>{{ header }}</th>
+        {% endfor %}
     </tr>
     </thead>
     <tbody>
-    {% for rank in ranking %}
-        {% set p = participants[rank['id']] %}
-        {% if is_participant %}
-            {% set p1 = p['player'] %}
-            {% set d1 = p['deck'] %}
-
-            {% set team_name = p1.name %}
-            {% set deck_name = d1.name %}
-
-            {% if is_thg %}
-                {% set p2 = p['player2'] %}
-                {% set d2 = p['deck2'] %}
-
-                {% set team_name = team_name + ', ' + p2.name %}
-                {% set deck_name = deck_name + ', ' + d2.name %}
-            {% endif %}
-        {% else %}
-            {% set team_name = p.name %}
-        {% endif %}
-        <tr>
+    {% for row in rows %}
+        {% set team = teams[row['id']] %}
+        {% set has_deck = 'deck' in team %}
+        {% set row_class = team['_class'] if '_class' in team else '' %}
+        <tr class="{{ row_class }}">
             <td>
-                <span>{{ team_name }}</span>
-                {% if is_participant %}
+                <span>{{ team['name'] }}</span>
+                {% if has_deck %}
                     <br/>
-                    <span class="blue-text text-darken-2">{{ deck_name }}</span>
+                    <span class="blue-text text-darken-2">{{ team['deck'] }}</span>
                 {% endif %}
             </td>
-            {% if show_t_wins %}
-                <td>
-                    {{ rank['t'] }}
-                </td>
-            {% endif %}
-            <td>
-                {{ rank['mw'] }}
-            </td>
-            <td>
-                {{ rank['ml'] }}
-            </td>
-            <td>
-                {{ rank['w'] }}
-            </td>
-            <td>
-                {{ rank['l'] }}
-            </td>
-            <td>
-                {{ rank['pts'] }}
-            </td>
+            {% for col in cols %}
+                <td>{{ row[col] }}</td>
+            {% endfor %}
         </tr>
     {% endfor %}
     </tbody>

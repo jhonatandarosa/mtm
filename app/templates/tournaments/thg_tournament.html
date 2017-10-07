@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block head %}
+    {% if admin %}
+        <link href="/static/css/view_tournament.css" rel="stylesheet"/>
+        <script src="/static/js/view_tournament.js"></script>
+    {% endif %}
+{% endblock %}
+{% block section %}Tournaments{% endblock %}
+
+{% block body %}
+    <h2>{{ tournament.name }}</h2>
+    <h4>Scores</h4>
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab"><a class="active" href="#teams">Teams</a></li>
+                <li class="tab"><a href="#players">Players</a></li>
+            </ul>
+        </div>
+        <div id="teams" class="col s12">
+            {% with table_data = rank_table %}
+                {% include 'ranking/table_view.html' %}
+            {% endwith %}
+        </div>
+        <div id="players" class="col s12">
+            {% with table_data = players_rank_table, teams = players %}
+                {% include 'ranking/table_view.html' %}
+            {% endwith %}
+        </div>
+    </div>
+    <br/>
+    <h4>Rounds</h4>
+    <br/>
+
+    {% include 'tournaments/rounds_view.html' %}
+
+    {% if admin %}
+        <!-- Actions-->
+        <div class="fixed-action-btn horizontal click-to-toggle">
+            <a class="btn-floating btn-large red">
+                <i class="material-icons">menu</i>
+            </a>
+            <ul>
+                <li><a class="btn-floating red" onclick="finishTournament({{ tournament.id }})"><i
+                        class="material-icons">done</i></a></li>
+            </ul>
+        </div>
+
+    {% endif %}
+{% endblock %}
