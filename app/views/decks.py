@@ -21,7 +21,7 @@ def index_view():
     for deck in decks:
         _class = ''
         if deck.status == 'inactive':
-            _class = 'red lighten-5'
+            _class = 'blue-grey lighten-5'
         team[deck.id] = {
             'name': deck.name,
             '_class': _class
