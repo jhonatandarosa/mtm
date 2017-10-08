@@ -1,3 +1,3 @@
 from .Ranking import Ranking
-from .TournamentManager import TournamentType
+from app.model.Tournament import TournamentType
 from .TournamentManager import TournamentManager

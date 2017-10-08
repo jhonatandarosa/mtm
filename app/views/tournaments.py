@@ -35,12 +35,13 @@ def get_players_and_decks(session):
     return players_map, decks_map
 
 
-def get_teams_data(participants, players, decks):
+def get_teams_data(participants, players, decks=None):
     teams = {}
     for p in participants:
         p1 = players[p.player_id]
-        d1 = decks[p.deck_id]
+
         if p.player2_id is not None:
+            d1 = decks[p.deck_id]
             p2 = players[p.player2_id]
             d2 = decks[p.deck2_id]
             teams[p.id] = {
@@ -50,8 +51,11 @@ def get_teams_data(participants, players, decks):
         else:
             teams[p.id] = {
                 'name': p1.name,
-                'deck': d1.name
             }
+            if decks is not None:
+                d1 = decks[p.deck_id]
+                teams[p.id]['deck'] = d1.name
+
     return teams
 
 
@@ -85,8 +89,6 @@ def process_thg_tournament(session, tournament):
 
     players, decks = get_players_and_decks(session)
 
-    pmap = to_entity_map(participants)
-
     players_data = {}
     for p in participants:
         players_data[p.player_id] = {
@@ -116,6 +118,29 @@ def process_thg_tournament(session, tournament):
     return 'tournaments/thg_tournament.html', args
 
 
+def process_draft_tournament(session, tournament):
+    tid = tournament.id
+
+    participants = session.query(Participant).filter(Participant.tournament_id == tid).all()
+    games = session.query(Game).filter(Game.tournament_id == tid).order_by(Game.id.asc()).all()
+
+    players, _ = get_players_and_decks(session)
+    teams = get_teams_data(participants, players)
+
+    args = {}
+    args['admin'] = request.args.get('admin', '') == 'True'
+    args['tournament'] = tournament
+    args['rounds'] = helper.group_by_round(games)
+    args['teams'] = teams
+
+    ranking = Ranking()
+    table = ranking.ranking_table(ranking.get_tournament_ranking(tid))
+
+    args['rank_table'] = table
+
+    return 'tournaments/draft_tournament.html', args
+
+
 def render_tournament(**kwargs):
     if 'tournament' not in kwargs and 'id' not in kwargs:
         abort(500)
@@ -127,12 +152,14 @@ def render_tournament(**kwargs):
     else:
         tournament = kwargs['tournament']
 
-    tournament_type = tournament.type
+    ttype = TournamentType(tournament.type)
 
-    if tournament_type == TournamentType.SINGLE.value:
+    if ttype == TournamentType.SINGLE:
         template, args = process_single_tournament(session, tournament)
-    elif tournament_type == TournamentType.TWO_HEADED_GIANT.value:
+    elif ttype == TournamentType.TWO_HEADED_GIANT:
         template, args = process_thg_tournament(session, tournament)
+    elif ttype == TournamentType.DRAFT:
+        template, args = process_draft_tournament(session, tournament)
 
     return render_template(template, **args)
 

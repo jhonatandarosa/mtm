@@ -137,8 +137,9 @@ class Ranking:
             if pid not in players_stats:
                 players_stats[pid] = create_stats()
 
-            if did not in decks_stats:
-                decks_stats[did] = create_stats()
+            if ts_map[tid].type != TournamentType.DRAFT.value:
+                if did not in decks_stats:
+                    decks_stats[did] = create_stats()
 
             if tid not in tournament_stats:
                 tournament_stats[tid] = {}
@@ -149,7 +150,9 @@ class Ranking:
             for s in sts:
                 if ts_map[tid].status == 'finished':
                     players_stats[pid][s] += parts_stats[participant.id][s]
-                    decks_stats[did][s] += parts_stats[participant.id][s]
+
+                    if ts_map[tid].type != TournamentType.DRAFT.value:
+                        decks_stats[did][s] += parts_stats[participant.id][s]
 
                     if ts_map[tid].type == TournamentType.TWO_HEADED_GIANT.value:
                         players_stats[pid2][s] += parts_stats[participant.id][s]

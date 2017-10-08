@@ -31,11 +31,7 @@ def new_tournament():
     if len(players) < 4:
         abort(400)
 
-    ttype = None
-    if type == TournamentType.SINGLE.value:
-        ttype = TournamentType.SINGLE
-    elif type == TournamentType.TWO_HEADED_GIANT.value:
-        ttype = TournamentType.TWO_HEADED_GIANT
+    ttype = TournamentType(type)
 
     if ttype is None:
         abort(400)

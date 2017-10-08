@@ -1,3 +1,4 @@
+SET sql_mode='NO_AUTO_VALUE_ON_ZERO';
 /* ----------------------- data ----------------------- */
 
 INSERT INTO player (id, name) VALUES
@@ -10,35 +11,33 @@ INSERT INTO player (id, name) VALUES
   (7, 'Daniel');
 
 
-INSERT INTO deck (id, name, type, status) VALUES
-  (0, 'Sem informação', 2, 'active'),
-  (1, 'Mono White Espadas', 1, 'active'),
-  (2, 'Mono Black Vampiros', 1, 'active'),
-  (3, 'Mono Blue Milling', 1, 'active'),
-  (4, 'Dimir', 1, 'active'),
-  (5, 'Golgari', 1, 'active'),
-  (6, 'Boros', 1, 'active'),
-  (7, 'Mono Red Goblins', 1, 'active'),
-  (8, 'Mono Black Zombies', 1, 'active'),
-  (9, 'Mono Red LandDestroyer', 1, 'active'),
-  (10, 'GR Lobisomens', 1, 'active'),
-  (11, 'BW Vampiros', 1, 'active'),
-  (12, 'BU Descarte', 1, 'active'),
-  (13, 'WB Cura', 1, 'inactive'),
-  (14, 'WRG Aliados', 1, 'active'),
-  (15, 'RUW Spells', 1, 'active'),
-  (16, 'GB Elfos', 1, 'active'),
-  (17, 'GB Sacrifício', 1, 'active'),
-  (18, 'Temur', 1, 'active'),
-  (19, 'Abzan', 1, 'active'),
-  (20, 'Rakdos', 1, 'active'),
-  (21, 'Azorius', 1, 'active'),
-  (22, 'Simic', 1, 'active'),
-  (23, 'Gruul', 1, 'active'),
-  (24, 'Orzhov', 1, 'active'),
-  (25, 'Mono Black Ratos', 1, 'active'),
-  (26, 'Mono Black Sombras', 1, 'active')
-;
+INSERT INTO deck (id, name, status) VALUES
+  (1, 'Mono White Espadas', 'active'),
+  (2, 'Mono Black Vampiros', 'active'),
+  (3, 'Mono Blue Milling', 'active'),
+  (4, 'Dimir', 'active'),
+  (5, 'Golgari', 'active'),
+  (6, 'Boros', 'active'),
+  (7, 'Mono Red Goblins', 'active'),
+  (8, 'Mono Black Zombies', 'active'),
+  (9, 'Mono Red LandDestroyer', 'active'),
+  (10, 'GR Lobisomens', 'active'),
+  (11, 'BW Vampiros', 'active'),
+  (12, 'BU Descarte', 'active'),
+  (13, 'WB Cura', 'inactive'),
+  (14, 'WRG Aliados', 'active'),
+  (15, 'RUW Spells', 'active'),
+  (16, 'GB Elfos', 'active'),
+  (17, 'GB Sacrifício', 'active'),
+  (18, 'Temur', 'active'),
+  (19, 'Abzan', 'active'),
+  (20, 'Rakdos', 'active'),
+  (21, 'Azorius', 'active'),
+  (22, 'Simic', 'active'),
+  (23, 'Gruul', 'active'),
+  (24, 'Orzhov', 'active'),
+  (25, 'Mono Black Ratos', 'active'),
+  (26, 'Mono Black Sombras', 'active');
 
 
 -- tournament 1

@@ -12,3 +12,4 @@ class Tournament(db.Model):
 class TournamentType(Enum):
     SINGLE = 1
     TWO_HEADED_GIANT = 2
+    DRAFT = 3

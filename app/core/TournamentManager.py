@@ -132,6 +132,43 @@ class TournamentManager:
 
         return schedule, participants
 
+    def generate_schedule_draft(self, matches):
+        participants = []
+
+        for match in matches:
+            p = Participant()
+            p.player_id = match[0]
+            # p.deck_id = match[1] # no decks
+            participants.append(p)
+
+        n = len(participants)
+        is_even = n % 2 == 0
+        is_odd = not is_even
+        rounds = n - 1 if is_even else n
+        games_count = int(n / 2 * (n - 1))
+
+        competitors = []
+        competitors.extend(participants)
+        if is_odd:
+            competitors.append(None)
+
+        games_per_round = int(len(competitors) / 2)
+
+        schedule = []
+
+        for r in range(0, rounds):
+            left = competitors[:games_per_round]
+            right = competitors[::-1][:games_per_round]
+
+            pairs = zip(left, right)
+            ss = [{'round': r, 'p1': pair[0], 'p2': pair[1]} for pair in pairs if
+                  pair[0] is not None and pair[1] is not None]
+            schedule.extend(ss)
+
+            competitors = [left[0]] + [right[0]] + left[1:] + right[1:]
+
+        return schedule, participants
+
     def generate_schedule_thg(self, matches):
         participants = []
         teams = list(itertools.combinations(matches, 2))
@@ -167,6 +204,8 @@ class TournamentManager:
             return self.generate_schedule_single(matches)
         elif tournament_type == TournamentType.TWO_HEADED_GIANT:
             return self.generate_schedule_thg(matches)
+        elif tournament_type == TournamentType.DRAFT:
+            return self.generate_schedule_draft(matches)
 
     def new_tournament(self, tournament_type, name, players_ids):
         decks = self.get_available_decks_for_next_tournament()

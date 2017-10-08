@@ -25,7 +25,7 @@ CREATE TABLE participant
   id            SERIAL PRIMARY KEY,
   tournament_id INT NOT NULL,
   player_id     INT NOT NULL,
-  deck_id       INT NOT NULL,
+  deck_id       INT NULL,
   player2_id    INT NULL,
   deck2_id      INT NULL,
   CONSTRAINT uix_players_tournament UNIQUE (player_id, player2_id, tournament_id),
