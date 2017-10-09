@@ -214,6 +214,12 @@ class Ranking:
     def get_tournament_ranking(self, id):
         return self.tournaments[id]
 
+    def get_player_ranking(self, id):
+        for player in self.players:
+            if player['id'] == id:
+                return player
+        return None
+
     def ranking_table(self, data, show_tournaments=False):
         table = {}
         table['headers'] = ['Name', 'M. Played', 'M. Won', 'M. Lost', 'G. Played', 'G. Won', 'G. Lost', 'Pts', '% Pts']
