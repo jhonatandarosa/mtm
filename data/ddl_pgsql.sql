@@ -8,7 +8,6 @@ CREATE TABLE deck
 (
   id     SERIAL PRIMARY KEY,
   name   VARCHAR(64) NOT NULL,
-  type   INT         NOT NULL,
   status VARCHAR(32) NOT NULL
 );
 

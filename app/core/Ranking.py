@@ -189,10 +189,13 @@ class Ranking:
                 tournament = ts_map[tid]
                 if tournament.status != 'finished':
                     continue
+
                 if tournament.type == TournamentType.TWO_HEADED_GIANT.value:
                     data = data['players']
+                    pids = (data[0]['id'], None)
+                else:
+                    pids = parts_players[data[0]['id']]
 
-                pids = parts_players[data[0]['id']]
                 if player['id'] in pids:
                     player['t'] += 1
 
@@ -206,8 +209,10 @@ class Ranking:
                     continue
                 if tournament.type == TournamentType.TWO_HEADED_GIANT.value:
                     data = data['decks']
+                    dids = (data[0]['id'], None)
+                else:
+                    dids = parts_decks[data[0]['id']]
 
-                dids = parts_decks[data[0]['id']]
                 if deck['id'] in dids:
                     deck['t'] += 1
 
