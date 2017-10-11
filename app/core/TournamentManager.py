@@ -2,6 +2,8 @@ import functools
 import itertools
 import random
 
+from sqlalchemy import or_
+
 from app import Session
 from app.core import Ranking
 from app.model import Deck
@@ -72,14 +74,17 @@ class TournamentManager:
         d = []
 
         session = Session()
-        parts = session.query(Participant.deck_id) \
-            .filter(Participant.player_id == player) \
-            .order_by(Participant.id.desc()) \
-            .limit(2) \
-            .distinct(Participant.deck_id)
+        query = session.query(Participant) \
+            .filter(or_(Participant.player_id == player, Participant.player2_id == player)) \
+            .order_by(Participant.id.desc())
 
-        for p in parts:
-            d.append(p.deck_id)
+        for p in query:
+            id = p.deck_id if p.player_id == player else p.deck2_id
+
+            if id not in d:
+                d.append(id)
+            if len(d) == 2:
+                break
 
         return d
 
