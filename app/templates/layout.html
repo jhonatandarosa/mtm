@@ -17,10 +17,16 @@
 </head>
 <body>
 
-<nav>
+<nav class="nav-extended">
     <div class="nav-wrapper">
-        <span class="brand-logo"><a href="/">&nbsp;MTM </a><small>{% block section %}{% endblock %}</small></span>
+        <a href="#" class="brand-logo">MTM</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a href="/tournaments">Tournaments</a></li>
+            <li><a href="/players">Players</a></li>
+            <li><a href="/decks">Decks</a></li>
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
             <li><a href="/tournaments">Tournaments</a></li>
             <li><a href="/players">Players</a></li>
             <li><a href="/decks">Decks</a></li>
@@ -45,6 +51,7 @@
         $('.modal').modal();
         $('select').material_select();
         $('ul.tabs').tabs();
+        $(".button-collapse").sideNav();
     });
 </script>
 {% block scripts %}
