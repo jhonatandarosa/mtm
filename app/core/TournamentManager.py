@@ -14,8 +14,14 @@ from .SingletonDecorator import SingletonDecorator
 
 class TournamentManager:
 
-    def get_winner(self, rank):
-        return rank[0]['id']
+    def get_winner_deck_id(self, tournament, participants, rank):
+        if tournament.type == TournamentType.TWO_HEADED_GIANT.value:
+            return rank['decks'][0]['id']
+        else:
+            pid = rank[0]['id']
+            participant = participants[pid]
+            return participant.deck_id
+
 
     def get_available_decks_for_next_tournament(self):
         session = Session()
@@ -39,10 +45,9 @@ class TournamentManager:
         ranking = Ranking()
         for tournament in tournaments:
             t = ranking.get_tournament_ranking(tournament.id)
-            winner = self.get_winner(t)
+            winner = self.get_winner_deck_id(tournament, participants, t)
 
-            participant = participants[winner]
-            deck = decks[participant.deck_id]
+            deck = decks[winner]
 
             result.remove(deck)
 
