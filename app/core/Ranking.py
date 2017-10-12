@@ -8,7 +8,7 @@ from app.model import Tournament
 from app.model import TournamentType
 from .SingletonDecorator import SingletonDecorator
 
-sts = ['mw', 'ml', 'w', 'l', 'pts', 't']
+sts = ['mw', 'ml', 'w', 'l', 'pts', 't', 'tp']
 
 
 def create_stats():
@@ -96,6 +96,32 @@ def get_participants_stats(games):
     return parts_stats
 
 
+def calculate_tournament_stats(items, attr, tournaments, ts_map, parts_rank):
+    for item in items:
+
+        for tid in tournaments:
+            data = tournaments[tid]
+            tournament = ts_map[tid]
+            if tournament.status != 'finished':
+                continue
+
+            is_thg = tournament.type == TournamentType.TWO_HEADED_GIANT.value
+
+            if is_thg:
+                data = data[attr]
+                # ids = (data[0]['id'], None)
+                # ids = parts_rank[data[0]['id']]
+
+            for i, d in enumerate(data):
+                did = d['id']
+                ids = (did, None) if is_thg else parts_rank[did]
+
+                if item['id'] in ids:
+                    item['tp'] += 1
+                    if i == 0:
+                        item['t'] += 1
+
+
 class Ranking:
     players = []
     decks = []
@@ -181,40 +207,8 @@ class Ranking:
             else:
                 self.tournaments[tid] = ranking(tournament_stats[tid])
 
-        for player in self.players:
-            player['t'] = 0
-
-            for tid in self.tournaments:
-                data = self.tournaments[tid]
-                tournament = ts_map[tid]
-                if tournament.status != 'finished':
-                    continue
-
-                if tournament.type == TournamentType.TWO_HEADED_GIANT.value:
-                    data = data['players']
-                    pids = (data[0]['id'], None)
-                else:
-                    pids = parts_players[data[0]['id']]
-
-                if player['id'] in pids:
-                    player['t'] += 1
-
-        for deck in self.decks:
-            deck['t'] = 0
-
-            for tid in self.tournaments:
-                data = self.tournaments[tid]
-                tournament = ts_map[tid]
-                if tournament.status != 'finished':
-                    continue
-                if tournament.type == TournamentType.TWO_HEADED_GIANT.value:
-                    data = data['decks']
-                    dids = (data[0]['id'], None)
-                else:
-                    dids = parts_decks[data[0]['id']]
-
-                if deck['id'] in dids:
-                    deck['t'] += 1
+        calculate_tournament_stats(self.players, 'players', self.tournaments, ts_map, parts_players)
+        calculate_tournament_stats(self.decks, 'decks', self.tournaments, ts_map, parts_decks)
 
     def get_tournament_ranking(self, id):
         return self.tournaments[id]
@@ -230,8 +224,10 @@ class Ranking:
         table['headers'] = ['Name', 'M. Played', 'M. Won', 'M. Lost', 'G. Played', 'G. Won', 'G. Lost', 'Pts', '% Pts']
         table['cols'] = ['mp', 'mw', 'ml', 'p', 'w', 'l', 'pts', 'ppts']
         if show_tournaments:
-            table['headers'].insert(1, 'Tournaments')
+            table['headers'].insert(1, 'T. Won')
+            table['headers'].insert(1, 'T. Played')
             table['cols'].insert(0, 't')
+            table['cols'].insert(0, 'tp')
 
         rows = []
 
