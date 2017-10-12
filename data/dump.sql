@@ -13,7 +13,7 @@ INSERT INTO player (id, name) VALUES
 INSERT INTO deck (id, name, status) VALUES
   (1, 'Mono White Espadas', 'active'),
   (2, 'Mono Black Vampiros', 'active'),
-  (3, 'Mono Blue Milling', 'active'),
+  (3, 'Mono Blue Milling', 'inactive'),
   (4, 'Dimir', 'active'),
   (5, 'Golgari', 'active'),
   (6, 'Boros', 'active'),
