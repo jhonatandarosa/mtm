@@ -26,3 +26,9 @@ def create_deck():
     Ranking().refresh()
 
     return '', 200
+
+
+@bp.after_request
+def remove_session(response):
+    Session.remove()
+    return response

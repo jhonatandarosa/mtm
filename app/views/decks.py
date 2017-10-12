@@ -39,3 +39,9 @@ def index_view():
         rank_table=table,
         teams=team
     )
+
+
+@bp.after_request
+def remove_session(response):
+    Session.remove()
+    return response

@@ -183,3 +183,9 @@ def index_view():
 @bp.route('/<int:tid>')
 def view_tournament(tid):
     return render_tournament(id=tid)
+
+
+@bp.after_request
+def remove_session(response):
+    Session.remove()
+    return response

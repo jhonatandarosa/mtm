@@ -36,7 +36,9 @@ INSERT INTO deck (id, name, status) VALUES
   (23, 'Gruul', 'active'),
   (24, 'Orzhov', 'active'),
   (25, 'Mono Black Ratos', 'active'),
-  (26, 'Mono Black Sombras', 'active');
+  (26, 'Mono Black Sombras', 'active'),
+  (27, 'Mono Black Demônios', 'active')
+;
 
 
 -- tournament 1
@@ -161,7 +163,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
 
 
 -- tournament 5
-INSERT INTO tournament (id, name, status, type) VALUES (5, '1° Two Headed Giants', 'active', 2);
+INSERT INTO tournament (id, name, status, type) VALUES (5, '1° Two Headed Giants', 'finished', 2);
 INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck2_id) VALUES (23, 5, 4, 6, 1, 12);
 INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck2_id) VALUES (24, 5, 4, 6, 2, 5);
 INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck2_id) VALUES (25, 5, 4, 6, 3, 2);

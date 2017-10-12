@@ -80,3 +80,9 @@ def view_player(id):
         player=player,
         ranking_table=table
     )
+
+
+@bp.after_request
+def remove_session(response):
+    Session.remove()
+    return response

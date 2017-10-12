@@ -1,8 +1,7 @@
 from flask import Flask
-from flask import render_template
 
-# Import MongoKit
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import scoped_session
 
 app = Flask(__name__)
 
@@ -13,7 +12,7 @@ app.config.from_object('config.DevelopmentConfig')
 # by modules and controllers
 # connect to the database
 db = SQLAlchemy(app)
-Session = db.sessionmaker(bind=db.engine)
+Session = scoped_session(db.sessionmaker(bind=db.engine))
 
 # Import a module / component using its blueprint handler variable (mod_auth)
 from app.views import init as init_views
@@ -31,6 +30,8 @@ from app.core import Ranking
 
 # init ranking
 Ranking().refresh()
+Session.remove()
+
 
 # from app.core import TournamentManager
 # from app.model import TournamentType

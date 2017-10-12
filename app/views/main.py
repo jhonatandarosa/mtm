@@ -26,3 +26,9 @@ def index_view():
     from .tournaments import render_tournament
 
     return render_tournament(tournament=tournament)
+
+
+@main.after_request
+def remove_session(response):
+    Session.remove()
+    return response

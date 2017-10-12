@@ -37,3 +37,9 @@ def update_game(gameId):
     Ranking().refresh()
 
     return make_response()
+
+
+@bp.after_request
+def remove_session(response):
+    Session.remove()
+    return response

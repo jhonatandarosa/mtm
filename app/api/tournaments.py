@@ -65,3 +65,9 @@ def change_status(tid):
     Ranking().refresh()
 
     return make_response()
+
+
+@bp.after_request
+def remove_session(response):
+    Session.remove()
+    return response
