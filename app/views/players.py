@@ -8,6 +8,7 @@ import functools
 
 from app import Session
 from app.model import Player
+from app.model import Deck
 from app.model import Game
 from app.model import Participant
 
@@ -22,11 +23,12 @@ def to_sorted_list(data):
 
     for k in data.keys():
         v = data[k]
-        rank.append({'id': k, 'value': v})
+        v['id'] = k
+        rank.append(v)
 
     def sort_f(a, b):
-        ga = a['value']
-        gb = b['value']
+        ga = a['perc']
+        gb = b['perc']
 
         return (gb > ga) - (gb < ga)
 
@@ -54,48 +56,62 @@ def get_player_info(id):
         dmap[p.id] = (p.deck_id, p.deck2_id)
 
     data = {}
+    deck_data = {}
 
     for game in games:
         if game.p1_wins == 0 and game.p2_wins == 0:
             continue
 
-        is_p1_winner = game.p1_wins > game.p2_wins
         is_p1_myself = id in pmap[game.p1_id]
 
+        wins = 0
+        losses = 0
         if is_p1_myself:
-            players = pmap[game.p2_id]
-            if is_p1_winner:
-                var = 'w'
-            else:
-                var = 'l'
+            my_team_decks = dmap[game.p1_id]
+            my_team = pmap[game.p1_id]
+            oponnets = pmap[game.p2_id]
+            wins = game.p1_wins
+            losses = game.p2_wins
         else:
-            players = pmap[game.p1_id]
-            if is_p1_winner:
-                var = 'l'
-            else:
-                var = 'w'
+            my_team_decks = dmap[game.p2_id]
+            my_team = pmap[game.p2_id]
+            oponnets = pmap[game.p1_id]
+            wins = game.p2_wins
+            losses = game.p1_wins
 
-        for p in players:
+        for p in oponnets:
+            if p is None:
+                continue
             if p not in data:
                 data[p] = {'w': 0, 'l': 0, 't': 0}
 
-            data[p]['t'] += 1
-            data[p][var] += 1
+            data[p]['t'] += wins + losses
+            data[p]['w'] += wins
+            data[p]['l'] += losses
 
-    del data[None]
+        if id == my_team[0]:
+            my_deck = my_team_decks[0]
+        else:
+            my_deck = my_team_decks[1]
 
-    mw_p = {}
-    ml_p = {}
+        if my_deck not in deck_data:
+            deck_data[my_deck] = {'w': 0, 'l': 0, 't': 0}
+
+        deck_data[my_deck]['t'] += wins + losses
+        deck_data[my_deck]['w'] += wins
+        deck_data[my_deck]['l'] += losses
 
     for p in data:
         t = data[p]['t']
         w = data[p]['w']
-        l = data[p]['l']
+        data[p]['perc'] = w / t * 100
 
-        mw_p[p] = w/t * 100
-        ml_p[p] = l/t * 100
+    for p in deck_data:
+        t = deck_data[p]['t']
+        w = deck_data[p]['w']
+        deck_data[p]['perc'] = w / t * 100
 
-    return to_sorted_list(mw_p), to_sorted_list(ml_p)
+    return to_sorted_list(data), to_sorted_list(deck_data)
 
 
 @bp.route('/')
@@ -130,25 +146,31 @@ def view_player(id):
 
     player = session.query(Player).filter(Player.id == id).one()
     players = session.query(Player).all()
+    decks = session.query(Deck).all()
 
     pmap = {}
-    for p in players:
-        pmap[p.id] = p
+    for d in players:
+        pmap[d.id] = d
+
+    dmap = {}
+    for d in decks:
+        dmap[d.id] = d
 
     ranking = Ranking()
     rank_data = ranking.get_player_ranking(id)
 
     table = ranking.ranking_table([rank_data], True)
 
-    mw_p, ml_p, = get_player_info(id)
+    games_data, decks_data = get_player_info(id)
 
     return render_template(
         'players/view_player.html',
         player=player,
         players=pmap,
+        decks=dmap,
         ranking_table=table,
-        mw_p=mw_p,
-        ml_p=ml_p,
+        games_data=games_data,
+        decks_data=decks_data
     )
 
 
