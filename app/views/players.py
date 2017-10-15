@@ -132,6 +132,10 @@ def index_view():
 
     table = ranking.ranking_table(ranking.players, True)
 
+    for id in team:
+        player = team[id]
+        player['link'] = '/players/%s' % id
+
     return render_template(
         'players/index.html',
         admin=admin,

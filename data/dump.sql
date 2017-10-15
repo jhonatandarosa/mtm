@@ -159,7 +159,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   (4, 4, 21, 20, 0, 2),
   -- round 5
   (4, 5, 19, 21, 1, 2),
-  (4, 5, 22, 18, 2, 0);
+  (4, 5, 22, 18, 0, 2);
 
 
 -- tournament 5
