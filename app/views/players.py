@@ -94,12 +94,13 @@ def get_player_info(id):
         else:
             my_deck = my_team_decks[1]
 
-        if my_deck not in deck_data:
-            deck_data[my_deck] = {'w': 0, 'l': 0, 't': 0}
+        if my_deck is not None:
+            if my_deck not in deck_data:
+                deck_data[my_deck] = {'w': 0, 'l': 0, 't': 0}
 
-        deck_data[my_deck]['t'] += wins + losses
-        deck_data[my_deck]['w'] += wins
-        deck_data[my_deck]['l'] += losses
+            deck_data[my_deck]['t'] += wins + losses
+            deck_data[my_deck]['w'] += wins
+            deck_data[my_deck]['l'] += losses
 
     for p in data:
         t = data[p]['t']

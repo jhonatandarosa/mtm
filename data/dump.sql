@@ -42,7 +42,7 @@ INSERT INTO deck (id, name, status) VALUES
 
 
 -- tournament 1
-INSERT INTO tournament (id, name, status, type) VALUES (1, '1° DGT Magic Tournament', 'finished', 1);
+INSERT INTO tournament (id, name, status, type) VALUES (1, '1º DGT Magic Tournament', 'finished', 1);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
   (1, 1, 1, 16), -- Jhonatan
   (2, 1, 4, 17), -- Alexandre
@@ -73,7 +73,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
 
 
 -- tournament 2
-INSERT INTO tournament (id, name, status, type) VALUES (2, '2° DGT Magic Tournament', 'finished', 1);
+INSERT INTO tournament (id, name, status, type) VALUES (2, '2º DGT Magic Tournament', 'finished', 1);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
   (7, 2, 1, 17), -- Jhonatan
   (8, 2, 4, 3),  -- Alexandre
@@ -106,7 +106,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
   (2, 5, 11, 10, 2, 0);
 
 -- tournament 3
-INSERT INTO tournament (id, name, status, type) VALUES (3, '3° DGT Magic Tournament', 'finished', 1);
+INSERT INTO tournament (id, name, status, type) VALUES (3, '3º DGT Magic Tournament', 'finished', 1);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
   (13, 3, 1, 8),  -- Jhonatan
   (14, 3, 4, 10), -- Alexandre
@@ -135,7 +135,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
 
 
 -- tournament 4
-INSERT INTO tournament (id, name, status, type) VALUES (4, '4° DGT Magic Tournament', 'finished', 1);
+INSERT INTO tournament (id, name, status, type) VALUES (4, '4º DGT Magic Tournament', 'finished', 1);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
   (18, 4, 1, 4),  -- Jhonatan
   (19, 4, 4, 11), -- Alexandre
@@ -163,7 +163,7 @@ INSERT into game(tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
 
 
 -- tournament 5
-INSERT INTO tournament (id, name, status, type) VALUES (5, '1° Two Headed Giants', 'finished', 2);
+INSERT INTO tournament (id, name, status, type) VALUES (5, '1º Two Headed Giants', 'finished', 2);
 INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck2_id) VALUES (23, 5, 4, 6, 1, 12);
 INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck2_id) VALUES (24, 5, 4, 6, 2, 5);
 INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck2_id) VALUES (25, 5, 4, 6, 3, 2);
@@ -174,3 +174,17 @@ INSERT INTO participant (id, tournament_id, player_id, deck_id, player2_id, deck
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (48, 5, 1, 23, 28, 2, 0);
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (49, 5, 2, 24, 27, 0, 2);
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (50, 5, 3, 25, 26, 1, 2);
+
+-- tournament 6
+INSERT INTO tournament (id, name, status, type) VALUES (6, '1º Draftzinho', 'active', 3);
+INSERT INTO participant (id, tournament_id, player_id) VALUES (29, 6, 1);
+INSERT INTO participant (id, tournament_id, player_id) VALUES (30, 6, 2);
+INSERT INTO participant (id, tournament_id, player_id) VALUES (31, 6, 3);
+INSERT INTO participant (id, tournament_id, player_id) VALUES (32, 6, 4);
+
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (51, 6, 1, 31, 29, 0, 2);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (52, 6, 1, 30, 32, 0, 2);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (53, 6, 2, 31, 32, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (54, 6, 2, 29, 30, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (55, 6, 3, 31, 30, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (56, 6, 3, 32, 29, 0, 0);
