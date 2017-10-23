@@ -46,6 +46,8 @@ class TournamentManager:
 
         ranking = Ranking()
         for tournament in tournaments:
+            if tournament.type == TournamentType.DRAFT.value:
+                continue
             t = ranking.get_tournament_ranking(tournament.id)
             winner = self.get_winner_deck_id(tournament, participants, t)
 
