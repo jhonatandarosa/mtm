@@ -220,3 +220,23 @@ INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALU
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (66, 8, 2, 40, 38, 2, 1);
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (67, 8, 3, 37, 38, 0, 0);
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (68, 8, 3, 39, 40, 0, 0);
+
+
+-- tournament 9
+INSERT INTO tournament (id, name, status, type) VALUES (9, '5º DGT Magic Tournament', 'active', 1);
+INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (41, 9, 8, 1);
+INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (42, 9, 3, 7);
+INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (43, 9, 2, 9);
+INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (44, 9, 4, 18);
+INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (45, 9, 1, 19);
+
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (69, 9, 1, 42, 45, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (70, 9, 1, 43, 44, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (71, 9, 2, 41, 44, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (72, 9, 2, 42, 43, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (73, 9, 3, 41, 43, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (74, 9, 3, 44, 45, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (75, 9, 4, 41, 42, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (76, 9, 4, 43, 45, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (77, 9, 5, 42, 45, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (78, 9, 5, 43, 44, 0, 0);
