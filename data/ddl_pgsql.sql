@@ -1,7 +1,8 @@
 CREATE TABLE player
 (
   id   SERIAL PRIMARY KEY,
-  name VARCHAR(64) NOT NULL
+  name VARCHAR(64) NOT NULL,
+  nickname VARCHAR(64) NULL
 );
 
 CREATE TABLE deck
