@@ -123,8 +123,12 @@ def index_view():
     team = {}
 
     for player in players:
+        name = player.name
+        if player.nickname is not None:
+            name = player.nickname
+
         team[player.id] = {
-            'name': player.name
+            'name': name
         }
 
     admin = request.args.get('admin', '') == 'True'

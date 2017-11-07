@@ -18,7 +18,9 @@
         <tbody>
         {% for row in data %}
             <tr>
-                <td>{{ teams[row['id']].name }}</td>
+            {% set team = teams[row['id']] %}
+            {% set name = team.nickname if team.nickname else team.name %}
+                <td>{{ name }}</td>
                 <td>{{ row['t'] }}</td>
                 <td>{{ row['w'] }}</td>
                 <td>{{ row['l'] }}</td>
@@ -34,7 +36,8 @@
         <div class="col s12">
             <div class="card teal darken-1">
                 <div class="card-content white-text">
-                    <span class="card-title">{{ player.name }}</span>
+                    {% set nickname = '(' + player.nickname + ')' if player.nickname else '' %}
+                    <span class="card-title">{{ player.name }} {{ nickname }}</span>
                     <hr/>
                     <table class="responsive-table">
                         {% set headers = ranking_table['headers'] %}

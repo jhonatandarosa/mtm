@@ -44,13 +44,16 @@ def get_teams_data(participants, players, decks=None):
             d1 = decks[p.deck_id]
             p2 = players[p.player2_id]
             d2 = decks[p.deck2_id]
+            p1name = p1.nickname if p1.nickname is not None else p1.name
+            p2name = p2.nickname if p2.nickname is not None else p2.name
             teams[p.id] = {
-                'name': '%s, %s' % (p1.name, p2.name),
+                'name': '%s, %s' % (p1name, p2name),
                 'deck': '%s, %s' % (d1.name, d2.name)
             }
         else:
+            p1name = p1.nickname if p1.nickname is not None else p1.name
             teams[p.id] = {
-                'name': p1.name,
+                'name': p1name,
             }
             if decks is not None:
                 d1 = decks[p.deck_id]
