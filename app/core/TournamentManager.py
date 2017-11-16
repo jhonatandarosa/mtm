@@ -24,7 +24,6 @@ class TournamentManager:
             participant = participants[pid]
             return participant.deck_id
 
-
     def get_available_decks_for_next_tournament(self):
         session = Session()
 
@@ -58,10 +57,9 @@ class TournamentManager:
         # sort decks
         play_map = {}
         for deck_data in ranking.decks:
-            w = deck_data['w']
-            l = deck_data['l']
+            mp = deck_data['mp']
 
-            play_map[deck_data['id']] = w + l
+            play_map[deck_data['id']] = mp
 
         def deck_sort(a, b):
             ga = play_map[a.id]
@@ -70,7 +68,26 @@ class TournamentManager:
             return (ga > gb) - (ga < gb)
 
         result.sort(key=functools.cmp_to_key(deck_sort))
+
+        result = self.randomize_grouped_by_matchs_played(result, play_map)
+
         return result
+
+    def randomize_grouped_by_matchs_played(self, decks, play_map):
+        groups = []
+
+        for deck in decks:
+            mp = play_map[deck.id]
+
+            while len(groups) <= mp:
+                groups.append([])
+
+            groups[mp].append(deck)
+
+        for group in groups:
+            random.shuffle(group)
+
+        return list(itertools.chain(*groups))
 
     def get_last_decks_from_player(self, player):
         d = []
@@ -140,7 +157,10 @@ class TournamentManager:
                   pair[0] is not None and pair[1] is not None]
             schedule.extend(ss)
 
-            competitors = [left[0]] + [right[0]] + left[1:] + right[1:]
+            competitors = [left[0]] + [right[0]] + left[1:] + right[1:][::-1]
+
+        for s in schedule:
+            print('%s %sx%s' % (s['round'], s['p1'].player_id, s['p2'].player_id))
 
         return schedule, participants
 
@@ -224,6 +244,8 @@ class TournamentManager:
 
         matches = self.match_decks_and_players(decks, players_ids)
 
+        schedule, participants = self.generate_schedule(tournament_type, matches)
+
         session = Session()
 
         tournament = Tournament()
@@ -233,8 +255,6 @@ class TournamentManager:
 
         session.add(tournament)
         session.commit()
-
-        schedule, participants = self.generate_schedule(tournament_type, matches)
 
         for participant in participants:
             participant.tournament_id = tournament.id

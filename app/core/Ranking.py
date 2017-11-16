@@ -8,7 +8,7 @@ from app.model import Tournament
 from app.model import TournamentType
 from .SingletonDecorator import SingletonDecorator
 
-sts = ['mw', 'ml', 'w', 'l', 'pts', 't', 'tp']
+sts = ['mp', 'mw', 'ml', 'p', 'w', 'l', 'pts', 't', 'tp']
 
 
 def create_stats():
@@ -87,8 +87,10 @@ def get_participants_stats(games):
             loses = entry[1][1]
             pts = calc_points(wins, loses)
 
+            parts_stats[p]['mp'] += 1
             parts_stats[p]['w'] += wins
             parts_stats[p]['l'] += loses
+            parts_stats[p]['p'] += wins + loses
             parts_stats[p]['pts'] += pts
             parts_stats[p]['mw'] += 1 if wins > loses else 0
             parts_stats[p]['ml'] += 1 if loses > wins else 0
@@ -220,9 +222,11 @@ class Ranking:
         return None
 
     def ranking_table(self, data, show_tournaments=False):
-        table = {}
-        table['headers'] = ['Name', 'M. Played', 'M. Won', 'M. Lost', 'G. Played', 'G. Won', 'G. Lost', 'Pts', '% Pts']
-        table['cols'] = ['mp', 'mw', 'ml', 'p', 'w', 'l', 'pts', 'ppts']
+        table = {
+            'headers': ['Name', 'M. Played', 'M. Won', 'M. Lost', 'G. Played', 'G. Won', 'G. Lost', 'Pts', '% Pts'],
+            'cols': ['mp', 'mw', 'ml', 'p', 'w', 'l', 'pts', 'ppts']
+        }
+
         if show_tournaments:
             table['headers'].insert(1, 'T. Won')
             table['headers'].insert(1, 'T. Played')
@@ -233,8 +237,7 @@ class Ranking:
 
         for rank in data:
             row = dict(rank)
-            row['mp'] = row['mw'] + row['ml']
-            row['p'] = row['w'] + row['l']
+
             if row['mp'] > 0:
                 ppts = row['pts'] / (row['mp'] * 9) * 100
             else:

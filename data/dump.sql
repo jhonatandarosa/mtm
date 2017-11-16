@@ -2,7 +2,7 @@
 
 INSERT INTO player (id, name, nickname) VALUES
   (1, 'Jhonatan', NULL ),
-  (2, 'Maurício', NULL),
+  (2, 'Maurício', 'Dentz'),
   (3, 'Sérgio', 'Serjeta'),
   (4, 'Alexandre', 'Xandovisk'),
   (5, 'Anderson', 'Dentes de Sabre'),
@@ -225,7 +225,7 @@ INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALU
 
 
 -- tournament 9
-INSERT INTO tournament (id, name, status, type) VALUES (9, '5º DGT Magic Tournament', 'active', 1);
+INSERT INTO tournament (id, name, status, type) VALUES (9, '5º DGT Magic Tournament', 'finished', 1);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (41, 9, 4, 1);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (42, 9, 1, 7);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (43, 9, 2, 9);
@@ -233,18 +233,18 @@ INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (44, 9, 9
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (45, 9, 8, 19);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES (46, 9, 3, 20);
 
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (69, 9, 0, 41, 46, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (70, 9, 0, 42, 45, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (71, 9, 0, 43, 44, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (72, 9, 1, 41, 44, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (73, 9, 1, 46, 45, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (74, 9, 1, 42, 43, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (75, 9, 2, 41, 43, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (76, 9, 2, 44, 45, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (77, 9, 2, 46, 42, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (78, 9, 3, 41, 42, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (79, 9, 3, 43, 45, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (80, 9, 3, 44, 46, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (81, 9, 4, 41, 45, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (82, 9, 4, 42, 44, 0, 0);
-INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (83, 9, 4, 43, 46, 0, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (69, 9, 0, 41, 46, 2, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (70, 9, 0, 42, 45, 2, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (71, 9, 0, 43, 44, 1, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (72, 9, 1, 41, 44, 2, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (73, 9, 1, 46, 45, 2, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (74, 9, 1, 42, 43, 0, 2);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (75, 9, 2, 41, 43, 2, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (76, 9, 2, 44, 45, 2, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (77, 9, 2, 46, 42, 2, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (78, 9, 3, 41, 42, 1, 2);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (79, 9, 3, 43, 45, 0, 2);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (80, 9, 3, 44, 46, 0, 2);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (81, 9, 4, 41, 45, 2, 0);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (82, 9, 4, 42, 44, 2, 1);
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES (83, 9, 4, 43, 46, 0, 2);
