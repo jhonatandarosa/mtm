@@ -87,7 +87,7 @@ def get_participants_stats(games):
             loses = entry[1][1]
             pts = calc_points(wins, loses)
 
-            parts_stats[p]['mp'] += 1
+            parts_stats[p]['mp'] += max(0, min(wins + loses, 1))
             parts_stats[p]['w'] += wins
             parts_stats[p]['l'] += loses
             parts_stats[p]['p'] += wins + loses
