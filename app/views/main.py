@@ -11,6 +11,7 @@ from app.model import Deck
 from app.model import helper
 
 from app.core import Ranking
+from app.core import match_score
 
 main = Blueprint('blueprint_%s' % __name__, __name__, template_folder='templates')
 
@@ -26,6 +27,14 @@ def index_view():
     from .tournaments import render_tournament
 
     return render_tournament(tournament=tournament)
+
+
+@main.route('/about')
+def about_view():
+    return render_template(
+        'about.html',
+        match_score=match_score
+    )
 
 
 @main.after_request

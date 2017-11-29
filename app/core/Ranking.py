@@ -20,6 +20,20 @@ def create_stats():
     return stats
 
 
+def get_tier(deck):
+    if deck['mp'] > 0:
+        ppts = deck['pts'] / (deck['mp'] * 9) * 100
+    else:
+        ppts = 0
+
+    if ppts > 70:
+        return 'T1'
+    elif ppts > 35:
+        return 'T2'
+    else:
+        return 'T3'
+
+
 def ranking_sort(a, b):
     ga = a['pts']
     gb = b['pts']
@@ -37,6 +51,7 @@ def ranking(data):
     rank.sort(key=functools.cmp_to_key(ranking_sort))
 
     return rank
+
 
 def thg_players_ranking(parts_players, data):
     rank_players = {}
@@ -60,14 +75,14 @@ def tie_breaker(rank):
     p2_wins = 0
     if p1['pts'] == p2['pts']:
         session = Session()
-        games = session.query(Game)\
+        games = session.query(Game) \
             .filter(
-                or_(
-                    and_(Game.p1_id == p1['id'], Game.p2_id == p2['id']),
-                    and_(Game.p1_id == p2['id'], Game.p2_id == p1['id'])
-                )
-            )\
-            .order_by(Game.id.asc())\
+            or_(
+                and_(Game.p1_id == p1['id'], Game.p2_id == p2['id']),
+                and_(Game.p1_id == p2['id'], Game.p2_id == p1['id'])
+            )
+        ) \
+            .order_by(Game.id.asc()) \
             .all()
 
         for game in games:
@@ -234,6 +249,9 @@ class Ranking:
                 dstats = create_stats()
                 dstats['id'] = deck.id
                 self.decks.append(dstats)
+
+        for deck in self.decks:
+            deck['tier'] = get_tier(deck)
 
         self.tournaments = {}
         for tid in tournament_stats:

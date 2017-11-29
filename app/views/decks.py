@@ -13,6 +13,15 @@ bp = Blueprint('blueprint_%s' % __name__, __name__, url_prefix='/decks', templat
                static_folder='/static')
 
 
+def get_tier_class(tier):
+    if tier == 'T1':
+        return 'amber lighten-4'
+    elif tier == 'T2':
+        return 'grey lighten-4'
+    else:
+        return 'deep-orange lighten-4'
+
+
 def tier_sort(rank):
 
     def _tier_sort(a, b):
@@ -69,14 +78,23 @@ def tier_view():
             _class = 'blue-grey lighten-5'
         team[deck.id] = {
             'name': deck.name,
-            '_class': _class
+            '_class': _class,
+            'status': deck.status
         }
 
     admin = request.args.get('admin', '') == 'True'
 
     ranking = Ranking()
 
-    tiers = tier_sort(ranking.decks)
+    tiers = tier_sort(ranking.decks[:])
+
+    tiers = [x for x in tiers if team[x['id']]['status'] != 'inactive']
+
+    for deck in ranking.decks:
+        data = team[deck['id']]
+
+        if data['_class'] == '':
+            data['_class'] = get_tier_class(deck['tier'])
 
     table = ranking.ranking_table(tiers, True)
 

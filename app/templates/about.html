@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+{% block head %}
+{% endblock %}
+{% block section %}About{% endblock %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs indigo-text">
+                <li class="tab"><a class="active" href="#score">Score System</a></li>
+                <li class="tab"><a href="#tiers">Tiers</a></li>
+            </ul>
+        </div>
+        <div id="score" class="col s12">
+            The score system uses the following rules to calculate a match result:
+            <ul>
+                <li>Each vicotry gives 3 points</li>
+                <li>Win a match gives 3 extra points</li>
+                <li>Each lost subtracts 1 points</li>
+                <li>The score can not be negative</li>
+                <li>Drawn or not finished game gives 1 extra point</li>
+            </ul>
+            <b>The code:</b>
+            <pre><code>
+    pts = wins * 3
+
+    if wins > loses and wins > 0:
+        pts += 3
+
+    played = wins > 0 or loses > 0
+    drawn = wins == loses
+    finished = wins == 2 or loses == 2
+
+    if played and (drawn or not finished):
+        pts += 1
+    elif pts > 0 and loses > 0:
+        pts -= 1
+
+    return pts
+        </code></pre>
+            <h6>Score table:</h6>
+            <table class="bordered highlight responsive-table">
+                <thead>
+                <tr>
+                    <th>P1</th>
+                    <th>P2</th>
+                    <th>Points</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set scores = [(2,0),(2,1),(1,0),(1,1),(0,0),(1,2),(0,1),(0,2)] %}
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ score[0] }}</td>
+                        <td>{{ score[1] }}</td>
+                        <td>{{ match_score(score[0], score[1]) }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div id="tiers" class="col s12">
+            The tiers are divided based on the % points earned.
+            <table class="bordered highlight responsive-table">
+                <thead>
+                <tr>
+                    <th>Tier</th>
+                    <th>Range</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set ppts = [('Tier 1','>70%', 'amber'),('Tier 2', '35%~70%', 'grey'), ('Tier 3', '<35%', 'deep-orange')] %}
+                {% for range in ppts %}
+                    <tr class="{{ range[2] }} lighten-4">
+                        <td>{{ range[0] }}</td>
+                        <td>{{ range[1] }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
