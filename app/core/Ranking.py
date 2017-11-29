@@ -8,6 +8,8 @@ from app.model import Tournament
 from app.model import TournamentType
 from .SingletonDecorator import SingletonDecorator
 
+from sqlalchemy import or_, and_
+
 sts = ['mp', 'mw', 'ml', 'p', 'w', 'l', 'pts', 't', 'tp']
 
 
@@ -36,7 +38,6 @@ def ranking(data):
 
     return rank
 
-
 def thg_players_ranking(parts_players, data):
     rank_players = {}
     for k in data.keys():
@@ -49,6 +50,43 @@ def thg_players_ranking(parts_players, data):
                 rank_players[id][s] += data[k][s]
 
     return ranking(rank_players)
+
+
+def tie_breaker(rank):
+    p1 = rank[0]
+    p2 = rank[1]
+
+    p1_wins = 0
+    p2_wins = 0
+    if p1['pts'] == p2['pts']:
+        session = Session()
+        games = session.query(Game)\
+            .filter(
+                or_(
+                    and_(Game.p1_id == p1['id'], Game.p2_id == p2['id']),
+                    and_(Game.p1_id == p2['id'], Game.p2_id == p1['id'])
+                )
+            )\
+            .order_by(Game.id.asc())\
+            .all()
+
+        for game in games:
+            if game.p1_id == p1['id']:
+                if game.p1_wins > game.p2_wins:
+                    p1_wins += 1
+                else:
+                    p2_wins += 1
+            else:
+                if game.p1_wins > game.p2_wins:
+                    p2_wins += 1
+                else:
+                    p1_wins += 1
+
+        if p2_wins > p1_wins:
+            rank[0] = p2
+            rank[1] = p1
+
+    return rank
 
 
 def calc_points(wins, loses):
@@ -207,7 +245,9 @@ class Ranking:
                     'teams': ranking(tournament_stats[tid])
                 }
             else:
-                self.tournaments[tid] = ranking(tournament_stats[tid])
+                trank = ranking(tournament_stats[tid])
+                trank = tie_breaker(trank)
+                self.tournaments[tid] = trank
 
         calculate_tournament_stats(self.players, 'players', self.tournaments, ts_map, parts_players)
         calculate_tournament_stats(self.decks, 'decks', self.tournaments, ts_map, parts_decks)

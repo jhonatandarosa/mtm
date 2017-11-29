@@ -57,7 +57,7 @@ class TournamentManager:
         # sort decks
         play_map = {}
         for deck_data in ranking.decks:
-            mp = deck_data['mp']
+            mp = deck_data['tp']
 
             play_map[deck_data['id']] = mp
 
