@@ -24,21 +24,32 @@
         </div>
 
         <!-- Modal Structure -->
-        <div id="modal1" class="modal">
+        <div id="modal1" class="modal modal-fixed-footer">
             <div class="modal-content">
                 <h4>New Tournament</h4>
                 <div class="input-field col s6">
                     <input id="name" type="text" class="validate">
                     <label for="name">Name</label>
                 </div>
-                <div class="input-field col s12">
-                    <select id="type">
-                        <option value="" disabled selected>Choose your option</option>
-                        <option value="1">Single</option>
-                        <option value="2">Two Headed Giant</option>
-                        <option value="3">Draft</option>
-                    </select>
-                    <label>Tournament Type</label>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <select id="type">
+                            <option value="" disabled selected>Choose your option</option>
+                            <option value="1">Single</option>
+                            <option value="2">Two Headed Giant</option>
+                            <option value="3">Draft</option>
+                        </select>
+                        <label>Tournament Type</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <select id="tier">
+                            <option value="" disabled selected>Choose your option</option>
+                            <option value="T1">T1</option>
+                            <option value="T2">T2</option>
+                            <option value="T3">T3</option>
+                        </select>
+                        <label>Decks Tier</label>
+                    </div>
                 </div>
                 <div class="row">
                     {% for player in players %}

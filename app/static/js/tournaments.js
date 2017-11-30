@@ -1,9 +1,10 @@
 
 function createTournament() {
     const name = $('#name').val();
+    const tier = $('#tier').val();
     const type = parseInt($('#type').val());
     const players = $('[id*=player_]:checked');
-    const pids = []
+    const pids = [];
     for (let player of players) {
         let id = player.id;
         id = parseInt(id.replace('player_', ''));
@@ -13,6 +14,7 @@ function createTournament() {
     const payload = {
         name,
         type,
+        tier,
         players: pids
     };
 

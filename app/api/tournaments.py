@@ -16,7 +16,7 @@ bp = Blueprint('blueprint_%s' % __name__, __name__)
 @bp.route('/api/tournaments', methods=['POST'])
 def new_tournament():
     payload = request.json
-    params = ['name', 'type', 'players']
+    params = ['name', 'type', 'players', 'tier']
     for param in params:
         if param not in payload:
             abort(400)
@@ -24,8 +24,15 @@ def new_tournament():
     name = payload['name']
     type = payload['type']
     players = payload['players']
+    tier = payload['tier']
 
     if name.strip() == '':
+        abort(400)
+
+    if tier.strip() == '':
+        abort(400)
+
+    if tier not in ['T1', 'T2', 'T3']:
         abort(400)
 
     if len(players) < 4:
@@ -37,7 +44,7 @@ def new_tournament():
         abort(400)
 
     manager = TournamentManager()
-    manager.new_tournament(ttype, name, players)
+    manager.new_tournament(ttype, name, players, tier)
 
     Ranking().refresh()
 

@@ -14,6 +14,41 @@ from app.model import TournamentType
 from .SingletonDecorator import SingletonDecorator
 
 
+def group_by_key(data, key):
+    groups = {}
+
+    for d in data:
+        kv = d[key]
+        if kv not in groups:
+            groups[kv] = []
+        groups[kv].append(d)
+
+    return groups
+
+
+def sort_grouped_lists(grouped_lists, sort_fn):
+    for group in grouped_lists:
+        lst = grouped_lists[group]
+        lst.sort(key=functools.cmp_to_key(sort_fn))
+
+
+def randomize_grouped_by_matchs_played(decks, play_map):
+    groups = []
+
+    for deck in decks:
+        mp = play_map[deck['id']]
+
+        while len(groups) <= mp:
+            groups.append([])
+
+        groups[mp].append(deck)
+
+    for group in groups:
+        random.shuffle(group)
+
+    return list(itertools.chain(*groups))
+
+
 class TournamentManager:
 
     def get_winner_deck_id(self, tournament, participants, rank):
@@ -24,13 +59,14 @@ class TournamentManager:
             participant = participants[pid]
             return participant.deck_id
 
-    def get_available_decks_for_next_tournament(self):
+
+    def get_available_decks_for_next_tournament(self, tier):
         session = Session()
 
         ds = session.query(Deck).filter(Deck.status == 'active').all()
         parts = session.query(Participant).all()
-        tournaments = session.query(Tournament).filter(Tournament.status == 'finished').order_by(
-            Tournament.id.asc()).all()
+        # tournaments = session.query(Tournament).filter(Tournament.status == 'finished').order_by(
+        #     Tournament.id.asc()).all()
 
         decks = {}
         participants = {}
@@ -38,21 +74,19 @@ class TournamentManager:
         for p in parts:
             participants[p.id] = p
 
-        result = []
         for deck in ds:
             decks[deck.id] = deck
-            result.append(deck)
 
         ranking = Ranking()
-        for tournament in tournaments:
-            if tournament.type == TournamentType.DRAFT.value:
-                continue
-            t = ranking.get_tournament_ranking(tournament.id)
-            winner = self.get_winner_deck_id(tournament, participants, t)
-
-            deck = decks[winner]
-
-            result.remove(deck)
+        # for tournament in tournaments:
+        #     if tournament.type == TournamentType.DRAFT.value:
+        #         continue
+        #     t = ranking.get_tournament_ranking(tournament.id)
+        #     winner = self.get_winner_deck_id(tournament, participants, t)
+        #
+        #     deck = decks[winner]
+        #
+        #     result.remove(deck)
 
         # sort decks
         play_map = {}
@@ -62,32 +96,36 @@ class TournamentManager:
             play_map[deck_data['id']] = mp
 
         def deck_sort(a, b):
-            ga = play_map[a.id]
-            gb = play_map[b.id]
+            ga = play_map[a['id']]
+            gb = play_map[b['id']]
 
             return (ga > gb) - (ga < gb)
 
-        result.sort(key=functools.cmp_to_key(deck_sort))
+        tiers = group_by_key(ranking.decks, 'tier')
 
-        result = self.randomize_grouped_by_matchs_played(result, play_map)
+        sort_grouped_lists(tiers, deck_sort)
+
+        for t in tiers:
+            lst = tiers[t]
+            tiers[t] = randomize_grouped_by_matchs_played(lst, play_map)
+
+        if tier == 'T1':
+            order = ['T1', 'T2', 'T3']
+        elif tier == 'T2':
+            order = ['T2', 'T3', 'T1']
+        else:
+            order = ['T3', 'T2', 'T1']
+
+        result = []
+        for t in order:
+            lst = tiers[t]
+            for d in lst:
+                did = d['id']
+                if did not in decks:
+                    continue
+                result.append(decks[did])
 
         return result
-
-    def randomize_grouped_by_matchs_played(self, decks, play_map):
-        groups = []
-
-        for deck in decks:
-            mp = play_map[deck.id]
-
-            while len(groups) <= mp:
-                groups.append([])
-
-            groups[mp].append(deck)
-
-        for group in groups:
-            random.shuffle(group)
-
-        return list(itertools.chain(*groups))
 
     def get_last_decks_from_player(self, player):
         d = []
@@ -239,8 +277,8 @@ class TournamentManager:
         elif tournament_type == TournamentType.DRAFT:
             return self.generate_schedule_draft(matches)
 
-    def new_tournament(self, tournament_type, name, players_ids):
-        decks = self.get_available_decks_for_next_tournament()
+    def new_tournament(self, tournament_type, name, players_ids, tier=None):
+        decks = self.get_available_decks_for_next_tournament(tier)
 
         matches = self.match_decks_and_players(decks, players_ids)
 

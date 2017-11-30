@@ -16,6 +16,8 @@ class Config(object):
     SECRET_KEY = 'secret'
     # Define the database - we are working with
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    # If set to True, Flask-SQLAlchemy will track modifications of objects and emit signals. This requires extra memory and should be disabled if not needed.
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProductionConfig(Config):
