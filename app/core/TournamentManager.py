@@ -162,15 +162,7 @@ class TournamentManager:
 
         return matches
 
-    def generate_schedule_single(self, matches):
-        participants = []
-
-        for match in matches:
-            p = Participant()
-            p.player_id = match[0]
-            p.deck_id = match[1]
-            participants.append(p)
-
+    def round_robin_schedule(self, participants, team=False):
         n = len(participants)
         is_even = n % 2 == 0
         is_odd = not is_even
@@ -197,8 +189,45 @@ class TournamentManager:
 
             competitors = [left[0]] + [right[0]] + left[1:] + right[1:][::-1]
 
+        def impossible_game(game):
+            p1 = game['p1']
+            p2 = game['p2']
+            par1 = {p1.player_id, p1.player2_id}
+            par2 = {p2.player_id, p2.player2_id}
+            intersect = par1.intersection(par2)
+
+            return len(intersect) > 0
+
+        if team:
+            schedule = [x for x in schedule if not impossible_game(x)]
+            # fix rounds
+            r = 0
+            g = 0
+            for game in schedule:
+                game['round'] = r
+                g += 1
+                if g >= len(schedule) / rounds:
+                    g = 0
+                    r += 1
+
         for s in schedule:
-            print('%s %sx%s' % (s['round'], s['p1'].player_id, s['p2'].player_id))
+            if team:
+                print('%s (%s,%s)x(%s,%s)' % (s['round'], s['p1'].player_id, s['p1'].player2_id, s['p2'].player_id, s['p2'].player2_id))
+            else:
+                print('%s %sx%s' % (s['round'], s['p1'].player_id, s['p2'].player_id))
+
+        return schedule
+
+    def generate_schedule_single(self, matches):
+        participants = []
+
+        for match in matches:
+            p = Participant()
+            p.player_id = match[0]
+            p.deck_id = match[1]
+            participants.append(p)
+
+        schedule = self.round_robin_schedule(participants)
 
         return schedule, participants
 
@@ -211,31 +240,7 @@ class TournamentManager:
             # p.deck_id = match[1] # no decks
             participants.append(p)
 
-        n = len(participants)
-        is_even = n % 2 == 0
-        is_odd = not is_even
-        rounds = n - 1 if is_even else n
-        games_count = int(n / 2 * (n - 1))
-
-        competitors = []
-        competitors.extend(participants)
-        if is_odd:
-            competitors.append(None)
-
-        games_per_round = int(len(competitors) / 2)
-
-        schedule = []
-
-        for r in range(0, rounds):
-            left = competitors[:games_per_round]
-            right = competitors[::-1][:games_per_round]
-
-            pairs = zip(left, right)
-            ss = [{'round': r, 'p1': pair[0], 'p2': pair[1]} for pair in pairs if
-                  pair[0] is not None and pair[1] is not None]
-            schedule.extend(ss)
-
-            competitors = [left[0]] + [right[0]] + left[1:] + right[1:]
+        schedule = self.round_robin_schedule(participants)
 
         return schedule, participants
 
@@ -252,19 +257,7 @@ class TournamentManager:
             p.deck2_id = m2[1]
             participants.append(p)
 
-        r = len(matches) - 1
-        left = participants[:r]
-        right = participants[::-1][:-r]
-        schedule = []
-
-        for i in range(0, len(left)):
-            l = left[i]
-            r = right[i]
-            schedule.append({
-                'round': i + 1,
-                'p1': l,
-                'p2': r
-            })
+        schedule = self.round_robin_schedule(participants, True)
 
         return schedule, participants
 
