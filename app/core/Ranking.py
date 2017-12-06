@@ -181,11 +181,11 @@ def calculate_tournament_stats(items, attr, tournaments, ts_map, parts_rank, tty
 
 def get_title(ttype):
     if ttype == TournamentType.SINGLE.value:
-        return ''
+        return 'DGT Master'
     elif ttype == TournamentType.TWO_HEADED_GIANT.value:
-        return 'One Headed Giant'
+        return 'Giant Master'
     elif ttype == TournamentType.DRAFT.value:
-        return 'Strategy Master'
+        return 'Draft Master'
     return None
 
 
