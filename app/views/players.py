@@ -11,6 +11,7 @@ from app.model import Player
 from app.model import Deck
 from app.model import Game
 from app.model import Participant
+from app.model import TournamentType
 
 from app.core import Ranking
 
@@ -115,8 +116,7 @@ def get_player_info(id):
     return to_sorted_list(data), to_sorted_list(deck_data)
 
 
-@bp.route('/')
-def index_view():
+def send_player_ranking(ranking_data, block_name):
     session = Session()
     players = session.query(Player).all()
 
@@ -134,8 +134,7 @@ def index_view():
     admin = request.args.get('admin', '') == 'True'
 
     ranking = Ranking()
-
-    table = ranking.ranking_table(ranking.players, True)
+    table = ranking.ranking_table(ranking_data, True)
 
     for id in team:
         player = team[id]
@@ -145,8 +144,24 @@ def index_view():
         'players/index.html',
         admin=admin,
         rank_table=table,
-        teams=team
+        teams=team,
+        block_name='Players - ' + block_name,
+        titles=ranking.titles
     )
+
+
+def player_ranking_by_tournament_type(type, block_name):
+    ranking = Ranking()
+
+    ranking_players = ranking.tournaments_types[type.value]
+    return send_player_ranking(ranking_players, block_name)
+
+
+@bp.route('/')
+def index_view():
+    ranking = Ranking()
+
+    return send_player_ranking(ranking.players, 'Players')
 
 
 @bp.route('/<int:id>')
@@ -181,6 +196,21 @@ def view_player(id):
         games_data=games_data,
         decks_data=decks_data
     )
+
+
+@bp.route('/draft')
+def player_draft_ranking():
+    return player_ranking_by_tournament_type(TournamentType.DRAFT, 'Draft')
+
+
+@bp.route('/constructed')
+def player_draft_single():
+    return player_ranking_by_tournament_type(TournamentType.SINGLE, 'Constructed')
+
+
+@bp.route('/thg')
+def player_draft_thg():
+    return player_ranking_by_tournament_type(TournamentType.TWO_HEADED_GIANT, 'Two Headed Giant')
 
 
 @bp.after_request

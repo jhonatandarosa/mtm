@@ -18,6 +18,9 @@
                 margin-left: 10px;
             }
         }
+        .mtm-padding {
+            padding: 0 16px !important;
+        }
     </style>
 
     {% block head %}
@@ -25,20 +28,42 @@
 </head>
 <body>
 
+<ul id="playerDropdown" class="dropdown-content">
+    <li><a href="/players">Overall</a></li>
+    <li><a href="/players/constructed">Constructed</a></li>
+    <li><a href="/players/draft">Draft</a></li>
+    <li><a href="/players/thg">Two Headed Giant</a></li>
+</ul>
 <nav class="nav-extended indigo">
     <div class="nav-wrapper">
         <a href="/" class="brand-logo">MTM</a>
         <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="/tournaments">Tournaments</a></li>
-            <li><a href="/players">Players</a></li>
+            <li><a class="dropdown-button" data-activates="playerDropdown" href="#!">Players<i
+                    class="material-icons right">arrow_drop_down</i></a></li>
             <li><a href="/decks">Decks</a></li>
             <li><a href="/about">About</a></li>
         </ul>
         <ul class="side-nav" id="mobile-demo">
-            <li><a href="/tournaments">Tournaments</a></li>
-            <li><a href="/players">Players</a></li>
-            <li><a href="/decks">Decks</a></li>
+            <li class="bold"><a class="mtm-padding" href="/tournaments">Tournaments</a></li>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li class="bold">
+                        <a class="collapsible-header waves-effect waves-teal">Players</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="/players">Overall</a></li>
+                                <li><a href="/players/constructed">Constructed</a></li>
+                                <li><a href="/players/draft">Draft</a></li>
+                                <li><a href="/players/thg">Two Headed Giant</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="bold"><a class="mtm-padding" href="/decks">Decks</a></li>
         </ul>
     </div>
 </nav>
@@ -58,6 +83,7 @@
     $(document).ready(function () {
         // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
         $('.modal').modal();
+        $(".dropdown-button").dropdown();
         $('select').material_select();
         $(".button-collapse").sideNav();
         $('ul.tabs').tabs();

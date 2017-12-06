@@ -36,4 +36,4 @@ Session.remove()
 # from app.core import TournamentManager
 # from app.model import TournamentType
 
-# TournamentManager().new_tournament(TournamentType.SINGLE, '1° Two Headed Giants', [1, 2, 3, 4], 'T3')
+# TournamentManager().new_tournament(TournamentType.TWO_HEADED_GIANT, '1° Two Headed Giants', [1, 2, 3, 4, 5, 6], 'T3')

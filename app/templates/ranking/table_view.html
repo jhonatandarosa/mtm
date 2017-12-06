@@ -18,6 +18,7 @@
         {% set team = teams[row['id']] %}
         {% set has_deck = 'deck' in team %}
         {% set has_link = 'link' in team %}
+        {% set has_title = row['id'] in titles %}
         {% set row_class = team['_class'] if '_class' in team else '' %}
         <tr class="{{ row_class }}">
             <td>
@@ -29,6 +30,10 @@
                 {% if has_deck %}
                     <br/>
                     <span class="blue-text text-darken-2">{{ team['deck'] }}</span>
+                {% endif %}
+                {% if has_title %}
+                    <br/>
+                    <span class="deep-orange-text text-darken-2">{{ titles[row['id']]|join(', ') }}</span>
                 {% endif %}
             </td>
             {% for col in cols %}

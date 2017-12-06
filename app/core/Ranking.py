@@ -151,12 +151,14 @@ def get_participants_stats(games):
     return parts_stats
 
 
-def calculate_tournament_stats(items, attr, tournaments, ts_map, parts_rank):
+def calculate_tournament_stats(items, attr, tournaments, ts_map, parts_rank, ttype=None):
     for item in items:
 
         for tid in tournaments:
             data = tournaments[tid]
             tournament = ts_map[tid]
+            if ttype is not None and ttype != tournament.type:
+                continue
             if tournament.status != 'finished':
                 continue
 
@@ -177,10 +179,22 @@ def calculate_tournament_stats(items, attr, tournaments, ts_map, parts_rank):
                         item['t'] += 1
 
 
+def get_title(ttype):
+    if ttype == TournamentType.SINGLE.value:
+        return ''
+    elif ttype == TournamentType.TWO_HEADED_GIANT.value:
+        return 'One Headed Giant'
+    elif ttype == TournamentType.DRAFT.value:
+        return 'Strategy Master'
+    return None
+
+
 class Ranking:
     players = []
     decks = []
     tournaments = []
+    tournaments_types = {}
+    titles = {}
 
     def refresh(self):
         session = Session()
@@ -207,6 +221,11 @@ class Ranking:
         players_stats = {}
         decks_stats = {}
         tournament_stats = {}
+        tournaments_types_stats = {}
+
+        types = [TournamentType.SINGLE.value, TournamentType.TWO_HEADED_GIANT.value, TournamentType.DRAFT.value]
+        for ttype in types:
+            tournaments_types_stats[ttype] = {}
 
         for participant in participants:
             pid = participant.player_id
@@ -217,9 +236,19 @@ class Ranking:
 
             if pid not in players_stats:
                 players_stats[pid] = create_stats()
+                for type in types:
+                    tournaments_types_stats[type][pid] = create_stats()
+
+            if pid2 is not None and pid2 not in players_stats:
+                players_stats[pid2] = create_stats()
+                for type in types:
+                    tournaments_types_stats[type][pid2] = create_stats()
 
             if ts_map[tid].type != TournamentType.DRAFT.value:
                 if did not in decks_stats:
+                    decks_stats[did] = create_stats()
+
+                if did2 is not None and did2 not in decks_stats:
                     decks_stats[did] = create_stats()
 
             if tid not in tournament_stats:
@@ -230,14 +259,17 @@ class Ranking:
 
             for s in sts:
                 if ts_map[tid].status == 'finished':
+                    ttype = ts_map[tid].type
                     players_stats[pid][s] += parts_stats[participant.id][s]
+                    tournaments_types_stats[ttype][pid][s] += parts_stats[participant.id][s]
 
-                    if ts_map[tid].type != TournamentType.DRAFT.value:
+                    if ttype != TournamentType.DRAFT.value:
                         decks_stats[did][s] += parts_stats[participant.id][s]
 
-                    if ts_map[tid].type == TournamentType.TWO_HEADED_GIANT.value:
+                    if ttype == TournamentType.TWO_HEADED_GIANT.value:
                         players_stats[pid2][s] += parts_stats[participant.id][s]
                         decks_stats[did2][s] += parts_stats[participant.id][s]
+                        tournaments_types_stats[ttype][pid2][s] += parts_stats[participant.id][s]
 
                 tournament_stats[tid][participant.id][s] += parts_stats[participant.id][s]
 
@@ -269,6 +301,16 @@ class Ranking:
 
         calculate_tournament_stats(self.players, 'players', self.tournaments, ts_map, parts_players)
         calculate_tournament_stats(self.decks, 'decks', self.tournaments, ts_map, parts_decks)
+
+        for ttype in tournaments_types_stats:
+            stats = tournaments_types_stats[ttype]
+            stats = ranking(stats)
+            calculate_tournament_stats(stats, 'players', self.tournaments, ts_map, parts_players, ttype)
+            self.tournaments_types[ttype] = stats
+            pid = stats[0]['id']
+            if pid not in self.titles:
+                self.titles[pid] = []
+            self.titles[pid].append(get_title(ttype))
 
     def get_tournament_ranking(self, id):
         return self.tournaments[id]
