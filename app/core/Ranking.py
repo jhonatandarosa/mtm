@@ -181,11 +181,11 @@ def calculate_tournament_stats(items, attr, tournaments, ts_map, parts_rank, tty
 
 def get_title(ttype):
     if ttype == TournamentType.SINGLE.value:
-        return ''
+        return 'DGT Master'
     elif ttype == TournamentType.TWO_HEADED_GIANT.value:
-        return 'One Headed Giant'
+        return 'Giant Master'
     elif ttype == TournamentType.DRAFT.value:
-        return 'Strategy Master'
+        return 'Draft Master'
     return None
 
 
@@ -311,6 +311,8 @@ class Ranking:
             if pid not in self.titles:
                 self.titles[pid] = []
             self.titles[pid].append(get_title(ttype))
+            if len(self.titles[pid]) == 3:
+                self.titles[pid] = ['MTG Master']
 
     def get_tournament_ranking(self, id):
         return self.tournaments[id]
