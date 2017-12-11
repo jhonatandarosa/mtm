@@ -1,5 +1,3 @@
-/* ----------------------- data ----------------------- */
-
 INSERT INTO player (id, name, nickname) VALUES
   (1, 'Jhonatan', NULL ),
   (2, 'Maurício', 'Dentz'),

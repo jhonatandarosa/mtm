@@ -306,6 +306,8 @@ class Ranking:
 
         for ttype in tournaments_types_stats:
             stats = tournaments_types_stats[ttype]
+            if len(stats) == 0:
+                continue
             stats = ranking(stats)
             calculate_tournament_stats(stats, 'players', self.tournaments, ts_map, parts_players, ttype)
             self.tournaments_types[ttype] = stats
