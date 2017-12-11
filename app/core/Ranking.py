@@ -197,6 +197,8 @@ class Ranking:
     titles = {}
 
     def refresh(self):
+        self.titles = {}
+
         session = Session()
         session.flush()
         games = session.query(Game).order_by(Game.id.asc()).all()
