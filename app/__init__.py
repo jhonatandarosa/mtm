@@ -32,68 +32,60 @@ from app.core import Ranking
 # Ranking().refresh()
 # Session.remove()
 session = Session()
-print('dropping tables')
-print(session.execute('DROP TABLE game;'))
-print(session.execute('DROP TABLE participant;'))
-print(session.execute('DROP TABLE tournament;'))
-print(session.execute('DROP TABLE deck;'))
-print(session.execute('DROP TABLE player;'))
-
-db.create_all()
-
-print('loading dump')
-sql_file = open('data/dump.sql', 'r')
-
-# Create an empty command string
-sql_command = ''
-
-# Iterate over all lines in the sql file
-for line in sql_file:
-    # Ignore comented lines
-    if not line.startswith('--') and line.strip('\n'):
-        # Append line to the command string
-        line = line.strip('\n')
-        if '--' in line:
-            line = line[0: line.rindex('--')]
-        sql_command += line
-
-        # If the command string ends with ';', it is a full statement
-        if sql_command.endswith(';'):
-            # Try to execute statemente and commit it
-            try:
-                session.execute(sql_command)
-                session.commit()
-
-            # Assert in case of error
-            except Exception as e:
-                print(sql_command)
-                print('Ops')
-
-            # Finally, clear command string
-            finally:
-                sql_command = ''
-
-print('fixing serials')
-sql_file = open('data/pgsql_fix_serials.sql', 'r')
-
-# Create an empty command string
-sql_command = ''
-
-# Iterate over all lines in the sql file
-for line in sql_file:
-    sql_command += line
-
-try:
-    session.execute(sql_command)
-    session.commit()
-except Exception as e:
-    print(sql_command)
-    print('Ops')
-try:
-    session.execute('SELECT fix_serials();')
-    session.commit()
-except Exception as e:
-    print('Fix serials')
+#
+# print('loading dump')
+# sql_file = open('data/dump.sql', 'r')
+#
+# # Create an empty command string
+# sql_command = ''
+#
+# # Iterate over all lines in the sql file
+# for line in sql_file:
+#     # Ignore comented lines
+#     if not line.startswith('--') and line.strip('\n'):
+#         # Append line to the command string
+#         line = line.strip('\n')
+#         if '--' in line:
+#             line = line[0: line.rindex('--')]
+#         sql_command += line
+#
+#         # If the command string ends with ';', it is a full statement
+#         if sql_command.endswith(';'):
+#             # Try to execute statemente and commit it
+#             try:
+#                 session.execute(sql_command)
+#                 session.commit()
+#
+#             # Assert in case of error
+#             except Exception as e:
+#                 print(sql_command)
+#                 print('Ops')
+#
+#             # Finally, clear command string
+#             finally:
+#                 sql_command = ''
+#
+# print('fixing serials')
+# sql_file = open('data/pgsql_fix_serials.sql', 'r')
+#
+# # Create an empty command string
+# sql_command = ''
+#
+# # Iterate over all lines in the sql file
+# for line in sql_file:
+#     sql_command += line
+#
+# try:
+#     session.execute(sql_command)
+#     session.commit()
+# except Exception as e:
+#     print(sql_command)
+#     print('Ops')
+# try:
+#     session.execute('SELECT fix_serials();')
+#     session.commit()
+# except Exception as e:
+#     print('Fix serials')
 
 # from app.core import TournamentManager
 # from app.model import TournamentType
