@@ -37,73 +37,73 @@ def about_view():
     )
 
 
-@main.route('/query/dropall')
-def dropall():
-    session = Session()
-    print(session.execute('DROP TABLE game;'))
-    print(session.execute('DROP TABLE participant;'))
-    print(session.execute('DROP TABLE tournament;'))
-    print(session.execute('DROP TABLE deck;'))
-    print(session.execute('DROP TABLE player;'))
-
-@main.route('/query/dump')
-def dump():
-    session = Session()
-    sql_file = open('data/dump.sql', 'r')
-
-    # Create an empty command string
-    sql_command = ''
-
-    # Iterate over all lines in the sql file
-    for line in sql_file:
-        # Ignore comented lines
-        if not line.startswith('--') and line.strip('\n'):
-            # Append line to the command string
-            line = line.strip('\n')
-            if '--' in line:
-                line = line[0: line.rindex('--')]
-            sql_command += line
-
-            # If the command string ends with ';', it is a full statement
-            if sql_command.endswith(';'):
-                # Try to execute statemente and commit it
-                try:
-                    session.execute(sql_command)
-                    session.commit()
-
-                # Assert in case of error
-                except Exception as e:
-                    print(sql_command)
-                    print('Ops')
-
-                # Finally, clear command string
-                finally:
-                    sql_command = ''
-
-@main.route('/query/fix')
-def fix():
-    session = Session()
-    sql_file = open('data/pgsql_fix_serials.sql', 'r')
-
-    # Create an empty command string
-    sql_command = ''
-
-    # Iterate over all lines in the sql file
-    for line in sql_file:
-        sql_command += line
-
-    try:
-        session.execute(sql_command)
-        session.commit()
-    except Exception as e:
-        print(sql_command)
-        print('Ops')
-    try:
-        session.execute('SELECT fix_serials();')
-        session.commit()
-    except Exception as e:
-        print('Fix serials')
-
+# @main.route('/query/dropall')
+# def dropall():
+#     session = Session()
+#     print(session.execute('DROP TABLE game;'))
+#     print(session.execute('DROP TABLE participant;'))
+#     print(session.execute('DROP TABLE tournament;'))
+#     print(session.execute('DROP TABLE deck;'))
+#     print(session.execute('DROP TABLE player;'))
+#
+# @main.route('/query/dump')
+# def dump():
+#     session = Session()
+#     sql_file = open('data/dump.sql', 'r')
+#
+#     # Create an empty command string
+#     sql_command = ''
+#
+#     # Iterate over all lines in the sql file
+#     for line in sql_file:
+#         # Ignore comented lines
+#         if not line.startswith('--') and line.strip('\n'):
+#             # Append line to the command string
+#             line = line.strip('\n')
+#             if '--' in line:
+#                 line = line[0: line.rindex('--')]
+#             sql_command += line
+#
+#             # If the command string ends with ';', it is a full statement
+#             if sql_command.endswith(';'):
+#                 # Try to execute statemente and commit it
+#                 try:
+#                     session.execute(sql_command)
+#                     session.commit()
+#
+#                 # Assert in case of error
+#                 except Exception as e:
+#                     print(sql_command)
+#                     print('Ops')
+#
+#                 # Finally, clear command string
+#                 finally:
+#                     sql_command = ''
+#
+# @main.route('/query/fix')
+# def fix():
+#     session = Session()
+#     sql_file = open('data/pgsql_fix_serials.sql', 'r')
+#
+#     # Create an empty command string
+#     sql_command = ''
+#
+#     # Iterate over all lines in the sql file
+#     for line in sql_file:
+#         sql_command += line
+#
+#     try:
+#         session.execute(sql_command)
+#         session.commit()
+#     except Exception as e:
+#         print(sql_command)
+#         print('Ops')
+#     try:
+#         session.execute('SELECT fix_serials();')
+#         session.commit()
+#     except Exception as e:
+#         print('Fix serials')
+#
 
 @main.after_request
 def remove_session(response):
