@@ -39,6 +39,8 @@ print(session.execute('DROP TABLE tournament;'))
 print(session.execute('DROP TABLE deck;'))
 print(session.execute('DROP TABLE player;'))
 
+db.create_all()
+
 print('loading dump')
 sql_file = open('data/dump.sql', 'r')
 
