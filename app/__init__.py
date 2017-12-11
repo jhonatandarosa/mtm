@@ -29,12 +29,5 @@ db.create_all()
 from app.core import Ranking
 
 # init ranking
-# Ranking().refresh()
-
-session = Session()
-print(session.execute('DROP TABLE game;'))
-print(session.execute('DROP TABLE participant;'))
-print(session.execute('DROP TABLE tournament;'))
-print(session.execute('DROP TABLE deck;'))
-print(session.execute('DROP TABLE player;'))
+Ranking().refresh()
 Session.remove()
