@@ -198,6 +198,7 @@ class Ranking:
 
     def refresh(self):
         self.titles = {}
+        almost_there_count = {}
 
         session = Session()
         session.flush()
@@ -296,10 +297,18 @@ class Ranking:
                     'decks': thg_players_ranking(parts_decks, tournament_stats[tid]),
                     'teams': ranking(tournament_stats[tid])
                 }
+                prank = self.tournaments[tid]['players']
             else:
                 trank = ranking(tournament_stats[tid])
                 trank = tie_breaker(trank)
+                prank = trank
                 self.tournaments[tid] = trank
+            if tournament.status == 'finished':
+                second_in_line = prank[1]
+                prank_pid = parts_players[second_in_line['id']][0]
+                if prank_pid not in almost_there_count:
+                    almost_there_count[prank_pid] = 0
+                almost_there_count[prank_pid] += 1
 
         calculate_tournament_stats(self.players, 'players', self.tournaments, ts_map, parts_players)
         calculate_tournament_stats(self.decks, 'decks', self.tournaments, ts_map, parts_decks)
@@ -317,6 +326,17 @@ class Ranking:
             self.titles[pid].append(get_title(ttype))
             if len(self.titles[pid]) == 3:
                 self.titles[pid] = ['MTG Master']
+
+        almost_there_max = 0
+        for pid in almost_there_count:
+            if almost_there_count[pid] > almost_there_max:
+                almost_there_max = almost_there_count[pid]
+
+        for pid in almost_there_count:
+            if almost_there_count[pid] == almost_there_max:
+                if pid not in self.titles:
+                    self.titles[pid] = []
+                self.titles[pid].append('Quase lá')
 
     def get_tournament_ranking(self, id):
         return self.tournaments[id]
