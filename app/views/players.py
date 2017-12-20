@@ -13,7 +13,7 @@ from app.model import Game
 from app.model import Participant
 from app.model import TournamentType
 
-from app.core import Ranking
+from app.core import RankingManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__, url_prefix='/players', template_folder='templates/',
                static_folder='/static')
@@ -116,7 +116,7 @@ def get_player_info(id):
     return to_sorted_list(data), to_sorted_list(deck_data)
 
 
-def send_player_ranking(ranking_data, block_name):
+def send_player_ranking(ranking_data, block_name, titles):
     session = Session()
     players = session.query(Player).all()
 
@@ -133,38 +133,48 @@ def send_player_ranking(ranking_data, block_name):
 
     admin = request.args.get('admin', '') == 'True'
 
-    ranking = Ranking()
-    table = ranking.ranking_table(ranking_data, True)
+    rank_manager = RankingManager()
+    table = rank_manager.ranking_table(ranking_data, True)
 
     for id in team:
         player = team[id]
-        player['link'] = '/players/%s' % id
+        player['link'] = '/players/profile/%s' % id
 
     return render_template(
         'players/index.html',
         admin=admin,
         rank_table=table,
         teams=team,
-        block_name='Players - ' + block_name,
-        titles=ranking.titles
+        block_name=block_name,
+        titles=titles
     )
 
 
-def player_ranking_by_tournament_type(type, block_name):
-    ranking = Ranking()
+def player_ranking_by_tournament_type(type, block_name, year=None):
+    rank_manager = RankingManager()
+    ranking = rank_manager.get_ranking(year)
 
     ranking_players = ranking.tournaments_types[type.value]
-    return send_player_ranking(ranking_players, block_name)
+    return send_player_ranking(ranking_players, block_name, ranking.titles)
 
 
 @bp.route('/')
 def index_view():
-    ranking = Ranking()
+    rank_manager = RankingManager()
+    ranking = rank_manager.get_ranking()
 
-    return send_player_ranking(ranking.players, 'Players')
+    return send_player_ranking(ranking.players, 'Players', ranking.titles)
 
 
-@bp.route('/<int:id>')
+@bp.route('/<int:year>')
+def year_view(year):
+    rank_manager = RankingManager()
+    ranking = rank_manager.get_ranking(year)
+
+    return send_player_ranking(ranking.players, 'Players (%s)' % year, ranking.titles)
+
+
+@bp.route('/profile/<int:id>')
 def view_player(id):
     session = Session()
 
@@ -180,12 +190,15 @@ def view_player(id):
     for d in decks:
         dmap[d.id] = d
 
-    ranking = Ranking()
+    rank_manager = RankingManager()
+    ranking = rank_manager.get_ranking()
     rank_data = ranking.get_player_ranking(id)
 
-    table = ranking.ranking_table([rank_data], True)
+    table = rank_manager.ranking_table([rank_data], True)
 
     games_data, decks_data = get_player_info(id)
+
+    titles = rank_manager.get_titles(id)
 
     return render_template(
         'players/view_player.html',
@@ -194,23 +207,39 @@ def view_player(id):
         decks=dmap,
         ranking_table=table,
         games_data=games_data,
-        decks_data=decks_data
+        decks_data=decks_data,
+        titles=titles
     )
 
 
 @bp.route('/draft')
 def player_draft_ranking():
-    return player_ranking_by_tournament_type(TournamentType.DRAFT, 'Draft')
+    return player_ranking_by_tournament_type(TournamentType.DRAFT, 'Players - Draft')
+
+
+@bp.route('/draft/<int:year>')
+def player_draft_year_ranking(year):
+    return player_ranking_by_tournament_type(TournamentType.DRAFT, 'Players - Draft (%s)' % year, year)
 
 
 @bp.route('/constructed')
-def player_draft_single():
-    return player_ranking_by_tournament_type(TournamentType.SINGLE, 'Constructed')
+def player_single_ranking():
+    return player_ranking_by_tournament_type(TournamentType.SINGLE, 'Players - Constructed')
+
+
+@bp.route('/constructed/<int:year>')
+def player_single_year_ranking(year):
+    return player_ranking_by_tournament_type(TournamentType.SINGLE, 'Players - Constructed (%s)' % year, year)
 
 
 @bp.route('/thg')
-def player_draft_thg():
-    return player_ranking_by_tournament_type(TournamentType.TWO_HEADED_GIANT, 'Two Headed Giant')
+def player_thg_ranking():
+    return player_ranking_by_tournament_type(TournamentType.TWO_HEADED_GIANT, 'Players (Two Headed Giant)')
+
+
+@bp.route('/thg/<int:year>')
+def player_thg_year_ranking(year):
+    return player_ranking_by_tournament_type(TournamentType.TWO_HEADED_GIANT, 'Players - Two Headed Giant (%s)' % year, year)
 
 
 @bp.after_request

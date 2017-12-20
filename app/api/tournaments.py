@@ -7,7 +7,7 @@ from app import Session
 from app.model import Game
 from app.model import Tournament
 from app.model import TournamentType
-from app.core import Ranking
+from app.core import RankingManager
 from app.core import TournamentManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__)
@@ -46,7 +46,7 @@ def new_tournament():
     manager = TournamentManager()
     manager.new_tournament(ttype, name, players, tier)
 
-    Ranking().refresh()
+    RankingManager().refresh()
 
     return make_response()
 
@@ -69,7 +69,7 @@ def change_status(tid):
         session.add(tournament)
         session.commit()
 
-    Ranking().refresh()
+    RankingManager().refresh()
 
     return make_response()
 

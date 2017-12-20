@@ -5,7 +5,7 @@ from flask import abort
 
 from app import Session
 from app.model import Game
-from app.core import Ranking
+from app.core import RankingManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__)
 
@@ -34,7 +34,7 @@ def update_game(gameId):
     session.add(game)
     session.commit()
 
-    Ranking().refresh()
+    RankingManager().refresh()
 
     return make_response()
 

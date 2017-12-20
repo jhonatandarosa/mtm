@@ -7,6 +7,7 @@ class Tournament(db.Model):
     name = db.Column(db.String(64))
     status = db.Column(db.String(32))
     type = db.Column(db.Integer)
+    year = db.Column(db.Integer)
 
 
 class TournamentType(Enum):

@@ -26,8 +26,8 @@ init_api(app)
 # create database
 db.create_all()
 
-from app.core import Ranking
+from app.core import RankingManager
 
 # init ranking
-Ranking().refresh()
+RankingManager().refresh()
 Session.remove()

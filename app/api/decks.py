@@ -3,7 +3,7 @@ from flask import request
 
 from app import Session
 from app.model import Deck
-from app.core import Ranking
+from app.core import RankingManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__)
 
@@ -23,7 +23,7 @@ def create_deck():
     session.add(deck)
     session.commit()
 
-    Ranking().refresh()
+    RankingManager().refresh()
 
     return '', 200
 

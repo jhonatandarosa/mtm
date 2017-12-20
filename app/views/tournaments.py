@@ -12,7 +12,7 @@ from app.model import Deck
 from app.model import helper
 from app.core.TournamentManager import TournamentType
 
-from app.core import Ranking
+from app.core import RankingManager
 
 bp = Blueprint('blueprint_%s' % __name__, __name__, url_prefix='/tournaments', template_folder='templates/',
                static_folder='/static')
@@ -76,8 +76,8 @@ def process_single_tournament(session, tournament):
     args['rounds'] = helper.group_by_round(games)
     args['teams'] = get_teams_data(participants, players, decks)
 
-    ranking = Ranking()
-    table = ranking.ranking_table(ranking.get_tournament_ranking(tid))
+    rankingManager = RankingManager()
+    table = rankingManager.ranking_table(rankingManager.get_tournament_ranking(tid))
 
     args['rank_table'] = table
 
@@ -109,10 +109,10 @@ def process_thg_tournament(session, tournament):
     args['rounds'] = helper.group_by_round(games)
     args['teams'] = get_teams_data(participants, players, decks)
 
-    ranking = Ranking()
-    tournament_ranking = ranking.get_tournament_ranking(tid)
-    table = ranking.ranking_table(tournament_ranking['teams'])
-    players_table = ranking.ranking_table(tournament_ranking['players'])
+    rank_manager = RankingManager()
+    tournament_ranking = rank_manager.get_tournament_ranking(tid)
+    table = rank_manager.ranking_table(tournament_ranking['teams'])
+    players_table = rank_manager.ranking_table(tournament_ranking['players'])
 
     args['rank_table'] = table
     args['players_rank_table'] = players_table
@@ -136,8 +136,8 @@ def process_draft_tournament(session, tournament):
     args['rounds'] = helper.group_by_round(games)
     args['teams'] = teams
 
-    ranking = Ranking()
-    table = ranking.ranking_table(ranking.get_tournament_ranking(tid))
+    rank_manager = RankingManager()
+    table = rank_manager.ranking_table(ranking.get_tournament_ranking(tid))
 
     args['rank_table'] = table
 

@@ -190,23 +190,45 @@ def get_title(ttype):
 
 
 class Ranking:
-    players = []
-    decks = []
-    tournaments = []
-    tournaments_types = {}
-    titles = {}
+
+    def __init__(self, year) -> None:
+        super().__init__()
+        self.year = year
+        self.players = []
+        self.decks = []
+        self.tournaments = []
+        self.tournaments_types = {}
+        self.titles = {}
 
     def refresh(self):
+        self.players = []
+        self.decks = []
+        self.tournaments = []
+        self.tournaments_types = {}
         self.titles = {}
         almost_there_count = {}
 
         session = Session()
         session.flush()
-        games = session.query(Game).order_by(Game.id.asc()).all()
-        decks = session.query(Deck).filter(Deck.id > 0).order_by(Deck.id.asc()).all()
-        participants = session.query(Participant).all()
 
-        ts = session.query(Tournament).all()
+        decks = session.query(Deck).filter(Deck.id > 0).order_by(Deck.id.asc()).all()
+
+        if self.year is not None:
+            ts = session.query(Tournament).filter(Tournament.year == self.year).all()
+
+            participants = session.query(Participant) \
+                .join(Tournament, Participant.tournament_id == Tournament.id) \
+                .filter(Tournament.year == self.year).all()
+
+            games = session.query(Game) \
+                .join(Tournament, Game.tournament_id == Tournament.id) \
+                .filter(Tournament.year == self.year) \
+                .order_by(Game.id.asc()).all()
+
+        else:
+            ts = session.query(Tournament).all()
+            participants = session.query(Participant).all()
+            games = session.query(Game).order_by(Game.id.asc()).all()
 
         ts_map = {}
         for t in ts:
@@ -252,7 +274,7 @@ class Ranking:
                     decks_stats[did] = create_stats()
 
                 if did2 is not None and did2 not in decks_stats:
-                    decks_stats[did] = create_stats()
+                    decks_stats[did2] = create_stats()
 
             if tid not in tournament_stats:
                 tournament_stats[tid] = {}
@@ -305,7 +327,10 @@ class Ranking:
                 self.tournaments[tid] = trank
             if tournament.status == 'finished':
                 second_in_line = prank[1]
-                prank_pid = parts_players[second_in_line['id']][0]
+                if tournament.type == TournamentType.TWO_HEADED_GIANT.value:
+                    prank_pid = second_in_line['id']
+                else:
+                    prank_pid = parts_players[second_in_line['id']][0]
                 if prank_pid not in almost_there_count:
                     almost_there_count[prank_pid] = 0
                 almost_there_count[prank_pid] += 1
@@ -341,38 +366,11 @@ class Ranking:
     def get_tournament_ranking(self, id):
         return self.tournaments[id]
 
+    def contains_tournament(self, id):
+        return id in self.tournaments
+
     def get_player_ranking(self, id):
         for player in self.players:
             if player['id'] == id:
                 return player
         return None
-
-    def ranking_table(self, data, show_tournaments=False):
-        table = {
-            'headers': ['Name', 'M. Played', 'M. Won', 'M. Lost', 'G. Played', 'G. Won', 'G. Lost', 'Pts', '% Pts'],
-            'cols': ['mp', 'mw', 'ml', 'p', 'w', 'l', 'pts', 'ppts']
-        }
-
-        if show_tournaments:
-            table['headers'].insert(1, 'T. Won')
-            table['headers'].insert(1, 'T. Played')
-            table['cols'].insert(0, 't')
-            table['cols'].insert(0, 'tp')
-
-        rows = []
-
-        for rank in data:
-            row = dict(rank)
-
-            if row['mp'] > 0:
-                ppts = row['pts'] / (row['mp'] * 9) * 100
-            else:
-                ppts = 0
-            row['ppts'] = "{0:.2f}".format(round(ppts, 2))
-            rows.append(row)
-
-        table['rows'] = rows
-        return table
-
-
-Ranking = SingletonDecorator(Ranking)

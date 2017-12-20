@@ -5,7 +5,7 @@ from flask import request
 from app import Session
 from app.model import Deck
 
-from app.core import Ranking
+from app.core import RankingManager
 
 import functools
 
@@ -53,9 +53,10 @@ def index_view():
 
     admin = request.args.get('admin', '') == 'True'
 
-    ranking = Ranking()
+    rank_manager = RankingManager()
+    ranking = rank_manager.get_ranking()
 
-    table = ranking.ranking_table(ranking.decks, True)
+    table = rank_manager.ranking_table(ranking.decks, True)
 
     return render_template(
         'decks/index.html',
@@ -84,7 +85,8 @@ def tier_view():
 
     admin = request.args.get('admin', '') == 'True'
 
-    ranking = Ranking()
+    rank_manager = RankingManager()
+    ranking = rank_manager.get_ranking()
 
     tiers = tier_sort(ranking.decks[:])
 
@@ -96,7 +98,7 @@ def tier_view():
         if data['_class'] == '':
             data['_class'] = get_tier_class(deck['tier'])
 
-    table = ranking.ranking_table(tiers, True)
+    table = rank_manager.ranking_table(tiers, True)
 
     return render_template(
         'decks/index.html',
@@ -104,6 +106,7 @@ def tier_view():
         rank_table=table,
         teams=team
     )
+
 
 @bp.after_request
 def remove_session(response):

@@ -2,7 +2,7 @@
 {% block head %}
 
 {% endblock %}
-{% block section %}Player Data{% endblock %}
+{% block section %}Player Profile{% endblock %}
 
 {% macro opponent_table(data, teams) -%}
     <table class="bordered highlight responsive-table">
@@ -50,6 +50,16 @@
                             {% endfor %}
                         </tr>
                     </table>
+                    {% set tsz = titles|length %}
+                    {% if tsz > 0 %}
+                    <hr/>
+                    <p>Conquests:</p>
+                    <ul>
+                    {% for title in titles %}
+                        <li>{{ title }}</li>
+                    {% endfor %}
+                    </ul>
+                    {% endif %}
                 </div>
             </div>
         </div>

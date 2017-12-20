@@ -1,11 +1,12 @@
 import functools
 import itertools
 import random
+from datetime import datetime
 
 from sqlalchemy import or_
 
 from app import Session
-from app.core import Ranking
+from app.core import RankingManager
 from app.model import Deck
 from app.model import Game
 from app.model import Participant
@@ -59,7 +60,6 @@ class TournamentManager:
             participant = participants[pid]
             return participant.deck_id
 
-
     def get_available_decks_for_next_tournament(self, tier):
         session = Session()
 
@@ -77,7 +77,8 @@ class TournamentManager:
         for deck in ds:
             decks[deck.id] = deck
 
-        ranking = Ranking()
+        rank_manager = RankingManager()
+        ranking = rank_manager.get_ranking()
         # for tournament in tournaments:
         #     if tournament.type == TournamentType.DRAFT.value:
         #         continue
@@ -283,6 +284,7 @@ class TournamentManager:
         tournament.name = name
         tournament.status = 'active'
         tournament.type = tournament_type.value
+        tournament.year = datetime.now().year
 
         session.add(tournament)
         session.commit()
