@@ -17,7 +17,8 @@ CREATE TABLE tournament
   id     INT AUTO_INCREMENT PRIMARY KEY,
   name   VARCHAR(64) NOT NULL,
   status VARCHAR(32) NOT NULL,
-  type   INT(1)      NOT NULL
+  type   INT(1)      NOT NULL,
+  year   INT(4)      NOT NULL
 );
 
 CREATE TABLE participant

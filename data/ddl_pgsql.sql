@@ -17,7 +17,8 @@ CREATE TABLE tournament
   id     SERIAL PRIMARY KEY,
   name   VARCHAR(64) NOT NULL,
   status VARCHAR(32) NOT NULL,
-  type   INT         NOT NULL
+  type   INT         NOT NULL,
+  year   INT(4)      NOT NULL
 );
 
 CREATE TABLE participant
