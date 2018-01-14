@@ -137,7 +137,7 @@ def process_draft_tournament(session, tournament):
     args['teams'] = teams
 
     rank_manager = RankingManager()
-    table = rank_manager.ranking_table(ranking.get_tournament_ranking(tid))
+    table = rank_manager.ranking_table(rank_manager.get_tournament_ranking(tid))
 
     args['rank_table'] = table
 

@@ -1,12 +1,12 @@
 INSERT INTO player (id, name, nickname) VALUES
-  (1, 'Jhonatan', NULL ),
+  (1, 'Jhonatan', 'Charada' ),
   (2, 'Maurício', 'Dentz'),
-  (3, 'Sérgio', 'Serjeta'),
+  (3, 'Sérgio', 'McLovin'),
   (4, 'Alexandre', 'Xandovisk'),
-  (5, 'Anderson', 'Dentes de Sabre'),
+  (5, 'Anderson', 'Sabre'),
   (6, 'Israel', 'Peter'),
   (7, 'Daniel', NULL),
-  (8, 'Witor', NULL),
+  (8, 'Witor', 'UItor'),
   (9, 'Heitor', 'Velheta')
 ;
 
@@ -317,7 +317,7 @@ INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALU
 (113, 11, 4, 56, 57, 2, 0);
 
 -- tournament 12
-INSERT INTO tournament (id, name, status, type) VALUES (12, '8º DGT Magic Tournament', 'active', 1);
+INSERT INTO tournament (id, name, status, type, year) VALUES (12, '8º DGT Magic Tournament', 'finished', 1, 2017);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
 (59, 12, 8, 32),
 (60, 12, 2, 15),
@@ -345,7 +345,7 @@ INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALU
 
 
 -- tournament 13
-INSERT INTO tournament (id, name, status, type, year) VALUES (13, '9º DGT Magic Tournament', 'active', 1, 2018);
+INSERT INTO tournament (id, name, status, type, year) VALUES (13, '9º DGT Magic Tournament', 'active', 1, 2017);
 INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
 (65, 13, 4, 18),
 (66, 13, 9, 30),
@@ -357,31 +357,53 @@ INSERT INTO participant (id, tournament_id, player_id, deck_id) VALUES
 (72, 13, 8, 7 );
 
 INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
-(129, 13, 0, 65, 72, 0, 0),
-(130, 13, 0, 66, 71, 0, 0),
-(131, 13, 0, 67, 70, 0, 0),
-(132, 13, 0, 68, 69, 0, 0),
+(129, 13, 0, 65, 72, 1, 2),
+(130, 13, 0, 66, 71, 1, 2),
+(131, 13, 0, 67, 70, 1, 2),
+(132, 13, 0, 68, 69, 2, 0),
 (133, 13, 1, 65, 71, 0, 0),
-(134, 13, 1, 72, 70, 0, 0),
-(135, 13, 1, 66, 69, 0, 0),
-(136, 13, 1, 67, 68, 0, 0),
-(137, 13, 2, 65, 70, 0, 0),
+(134, 13, 1, 72, 70, 1, 2),
+(135, 13, 1, 66, 69, 2, 1),
+(136, 13, 1, 67, 68, 2, 1),
+(137, 13, 2, 65, 70, 2, 0),
 (138, 13, 2, 71, 69, 0, 0),
-(139, 13, 2, 72, 68, 0, 0),
+(139, 13, 2, 72, 68, 2, 0),
 (140, 13, 2, 66, 67, 1, 2),
-(141, 13, 3, 65, 69, 0, 0),
-(142, 13, 3, 70, 68, 0, 0),
+(141, 13, 3, 65, 69, 1, 2),
+(142, 13, 3, 70, 68, 1, 2),
 (143, 13, 3, 71, 67, 0, 0),
-(144, 13, 3, 72, 66, 0, 0),
+(144, 13, 3, 72, 66, 2, 1),
 (145, 13, 4, 65, 68, 0, 0),
-(146, 13, 4, 69, 67, 0, 0),
-(147, 13, 4, 70, 66, 0, 0),
-(148, 13, 4, 71, 72, 0, 0),
-(149, 13, 5, 65, 67, 0, 0),
+(146, 13, 4, 69, 67, 0, 2),
+(147, 13, 4, 70, 66, 2, 0),
+(148, 13, 4, 71, 72, 2, 1),
+(149, 13, 5, 65, 67, 2, 1),
 (150, 13, 5, 68, 66, 0, 0),
-(151, 13, 5, 69, 72, 0, 0),
+(151, 13, 5, 69, 72, 0, 2),
 (152, 13, 5, 70, 71, 0, 0),
-(153, 13, 6, 65, 66, 0, 0),
-(154, 13, 6, 67, 72, 0, 0),
-(155, 13, 6, 68, 71, 0, 0),
+(153, 13, 6, 65, 66, 2, 0),
+(154, 13, 6, 67, 72, 0, 2),
+(155, 13, 6, 68, 71, 2, 1),
 (156, 13, 6, 69, 70, 0, 2);
+
+
+-- tournament 14
+INSERT INTO tournament (id, name, status, type, year) VALUES (14, '4º Draftzinho', 'active', 3, 2018);
+INSERT INTO participant (id, tournament_id, player_id) VALUES
+(73, 14, 2),
+(74, 14, 8),
+(75, 14, 4),
+(76, 14, 3),
+(77, 14, 1);
+
+INSERT INTO game (id, tournament_id, round, p1_id, p2_id, p1_wins, p2_wins) VALUES
+(157, 14, 0, 74, 77, 0, 0),
+(158, 14, 0, 75, 76, 0, 0),
+(159, 14, 1, 73, 77, 0, 0),
+(160, 14, 1, 74, 75, 0, 0),
+(161, 14, 2, 73, 76, 0, 0),
+(162, 14, 2, 77, 75, 0, 0),
+(163, 14, 3, 73, 75, 0, 0),
+(164, 14, 3, 76, 74, 0, 0),
+(165, 14, 4, 73, 74, 0, 0),
+(166, 14, 4, 76, 77, 0, 0);
